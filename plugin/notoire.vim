@@ -1,4 +1,4 @@
-" --- DEFINE GENERIC FUNCTIONS -----------------------------------------------
+" --- GENERIC FUNCTIONS ------------------------------------------------------
 
 " Notes are nammed with a UID. We look up the highest name in the note folder
 " and return the increment to get a new name. UIDs are in hexadecimal
@@ -18,7 +18,7 @@ function NotoireGetNextNoteId()
 endfunction
 
 
-" --- DEFINE COMMAND FUNCTIONS -----------------------------------------------
+" --- COMMAND FUNCTIONS ------------------------------------------------------
 
 " open or create the index file (always note 0)
 function NotoireIndex()
@@ -39,7 +39,7 @@ function NotoireCheckIssues()
 endfunction
 
 
-" --- DEFINE COMMANDS --------------------------------------------------------
+" --- COMMANDS ---------------------------------------------------------------
 
 command! NotoireIndex call NotoireIndex()
 command! NotoireCheckIssues call NotoireCheckIssues()
