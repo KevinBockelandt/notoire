@@ -6,13 +6,16 @@ function NotoireGetNextNoteId()
   " TODO check the scope of variables
   let paths = globpath(g:notoire_folder, '*.note', 0, 1)
   let biggestId = 0
+
   for path in paths
     " only keep the id in the filename and convert to decimal for comparison
     let filename = str2nr(fnamemodify(path, ':t:r'), 16)
+
     if filename > biggestId
       let biggestId = filename
     endif
   endfor
+
   " TODO return the biggestId + 1
   echom biggestId
 endfunction
@@ -27,7 +30,7 @@ function NotoireIndex()
 endfunction
 
 " check for various potential issues with the current setup
-function NotoireCheckIssues()
+function NotoireCheckHealth()
   " TODO check that there are only .note files in the folder
   " TODO no subfolder
   " TODO a note 0 that is the index
@@ -38,8 +41,23 @@ function NotoireCheckIssues()
   echo "TODO - Should be performing the check"
 endfunction
 
+function NotoireOpenLink()
+  exe "vsplit " g:notoire_folder . "1.note"
+  
+endfunction
+
+function NotoireOpenCreateLink()
+  " if we are on a link, we open it
+  " if we are not on a link, create one with the current selection. Current
+  " word if there is no selection
+  " When we decide to create a new link, we need to display a buffer with the
+  " list of possible notes to link to or the option for a new note.
+  " Possibility of searching through existing notes easily to find the one
+endfunction
 
 " --- COMMANDS ---------------------------------------------------------------
 
 command! NotoireIndex call NotoireIndex()
-command! NotoireCheckIssues call NotoireCheckIssues()
+command! NotoireCheckHealth call NotoireCheckHealth()
+
+command! NotoireOpenLink call NotoireOpenLink()

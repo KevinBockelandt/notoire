@@ -1,20 +1,30 @@
 let b:link_regex = '\[.\+\](.\+)'
 
-" --- COMMAND FUNCTIONS ------------------------------------------------------
+" --- GENERIC FUNCTIONS ------------------------------------------------------
 
-function NotoireGoNextLink()
-  exe "normal! /" . b:link_regex . "\<cr>l"
-  noh
+function NotoireGoToLink(search_flags)
+  let save_cursor = getcurpos()
+  call search(b:link_regex, a:search_flags)
+
+  " if we found a link and jumped to it, move cursor to be inside the bracket
+  if getcurpos() != save_cursor
+    normal! l
+  endif
 endfunction
 
-function NotoireGoPrevLink()
-  exe "normal! ?" . b:link_regex . "\<cr>l"
-  noh
+
+" --- COMMAND FUNCTIONS ------------------------------------------------------
+
+function NotoireNextLink()
+  call NotoireGoToLink('')
+endfunction
+
+function NotoirePrevLink()
+  call NotoireGoToLink('b')
 endfunction
 
 
 " --- COMMANDS ---------------------------------------------------------------                                             
 
-command! -buffer NotoireGoNextLink call NotoireGoNextLink()
-command! -buffer NotoireGoPrevLink call NotoireGoPrevLink()
-
+command! -buffer NotoireNextLink call NotoireNextLink()
+command! -buffer NotoirePrevLink call NotoirePrevLink()
