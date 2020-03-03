@@ -6,6 +6,7 @@ let b:note_id_regex = '(\(\d\|[a-f]\)\+)$'
 
 " Notes are nammed with a UID. We look up the highest name in the note folder
 " and return the increment to get a new name. UIDs are in hexadecimal
+" Return a string representing the ID in hex
 function! notoire#get_next_note_id()
   " TODO check the scope of variables
   let paths = globpath(g:notoire_folder, '*.note', 0, 1)
@@ -20,8 +21,7 @@ function! notoire#get_next_note_id()
     endif
   endfor
 
-  " TODO return the biggestId + 1
-  echom biggestId
+  return printf("%x", biggestId + 1)
 endfunction
 
 
@@ -99,7 +99,12 @@ function! notoire#check_health()
   echo "TODO - Should be performing the check"
 endfunction
 
-function! notoire#open_create_link()
+function! notoire#create_note()
+  let note_id = notoire#get_next_note_id()
+  exe "edit" g:notoire_folder . "/" . note_id . ".note"
+endfunction
+
+function! notoire#create_note_with_link()
   " if we are on a link, we open it
   " if we are not on a link, create one with the current selection. Current
   " word if there is no selection
