@@ -71,20 +71,21 @@ function! notoire#prev_link()
   call notoire#go_to_link('b')
 endfunction
 
-function! notoire#open_link()
+function! notoire#open_link(cmd)
+  " TODO should do error handling if the variable for the folder isn't correct
   let link = notoire#get_link_under_cursor()
   if link != -1
     let note_id = matchstr(link, b:note_id_regex)
     if note_id != ""
-      exe "vsplit " g:notoire_folder . note_id[1:-2] . ".note"
+      exe a:cmd g:notoire_folder . note_id[1:-2] . ".note"
     endif
   endif
 endfunction
 
 " open or create the index file (always note 0)
-function! notoire#open_index()
+function! notoire#open_index(cmd)
   " TODO should do error handling if the variable for the folder isn't correct
-  exe "edit" g:notoire_folder . "/0.note"
+  exe a:cmd g:notoire_folder . "/0.note"
 endfunction
 
 " check for various potential issues with the current setup
@@ -99,12 +100,13 @@ function! notoire#check_health()
   echo "TODO - Should be performing the check"
 endfunction
 
-function! notoire#create_note()
+function! notoire#create_note(cmd)
+  " TODO should do error handling if the variable for the folder isn't correct
   let note_id = notoire#get_next_note_id()
-  exe "edit" g:notoire_folder . "/" . note_id . ".note"
+  exe a:cmd g:notoire_folder . "/" . note_id . ".note"
 endfunction
 
-function! notoire#create_note_with_link()
+function! notoire#create_note_with_link(cmd)
   " if we are on a link, we open it
   " if we are not on a link, create one with the current selection. Current
   " word if there is no selection
