@@ -106,12 +106,12 @@ function! notoire#create_note(cmd)
   exe a:cmd g:notoire_folder . "/" . note_id . ".note"
 endfunction
 
-function! notoire#create_note_with_link(cmd)
-  " if we are on a link, we open it
-  " if we are not on a link, create one with the current selection. Current
-  " word if there is no selection
-  " When we decide to create a new link, we need to display a buffer with the
-  " list of possible notes to link to or the option for a new note.
-  " Possibility of searching through existing notes easily to find the one
+" create a link to a new note with the visual selection
+" TODO ideally it would ask for the note to link to, instead of creating a new
+" note by default
+function! notoire#create_link(cmd)
+  let new_note_id = notoire#get_next_note_id()
+  exe "normal! \ei[\e`>lli](" . new_note_id . ")\e"
+  exe a:cmd g:notoire_folder . "/" . new_note_id . ".note"
 endfunction
 

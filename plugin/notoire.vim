@@ -13,8 +13,8 @@ command! NotoireCreateNote call notoire#create_note("edit")
 command! NotoireCreateNoteSplit call notoire#create_note("split")
 command! NotoireCreateNoteVsplit call notoire#create_note("vsplit")
 
-command! NotoireCreateNoteWithLink call notoire#create_note_with_link("edit")
-command! NotoireCreateNoteWithLinkSplit call notoire#create_note_with_link("split")
-command! NotoireCreateNoteWithLinkVsplit call notoire#create_note_with_link("vsplit")
+command! NotoireCreateLink call notoire#create_link("edit")
+command! NotoireCreateLinkSplit call notoire#create_link("split")
+command! NotoireCreateLinkVsplit call notoire#create_link("vsplit")
 
 command! NotoireCheckHealth call notoire#check_health()
