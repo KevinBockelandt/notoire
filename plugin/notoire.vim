@@ -1,3 +1,6 @@
+let g:ntr_link_rx = '\[.\{-}\](.\{-})'
+let g:ntr_note_id_rx = '(\(\d\|[a-f]\)\+)$'
+
 command! NotoireNextLink call notoire#next_link()
 command! NotoirePrevLink call notoire#prev_link()
 

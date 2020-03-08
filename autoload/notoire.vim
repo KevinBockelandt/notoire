@@ -1,7 +1,3 @@
-let b:link_regex = '\[.\{-}\](.\{-})'
-let b:note_id_regex = '(\(\d\|[a-f]\)\+)$'
-
-
 " --- GENERIC FUNCTIONS ------------------------------------------------------
 
 " Notes are nammed with a UID. We look up the highest name in the note folder
@@ -30,7 +26,14 @@ endfunction
 "Move the cursor to the next or previous link in the buffer
 function! notoire#go_to_link(search_flags)
   let save_cursor = getcurpos()
-  call search(b:link_regex, a:search_flags)
+
+  " TODO ugly hack to go to the first char of the link in most cases.
+  " Need to check if we are currently on a link and if yes position to start
+  if a:search_flags == 'b'
+    normal! h
+  endif
+
+  call search(g:ntr_link_rx, a:search_flags)
 
   " if we found a link and jumped to it, move cursor to be inside the bracket
   if getcurpos() != save_cursor
@@ -45,7 +48,7 @@ function! notoire#get_link_under_cursor()
   let temp_col = 0
 
   while 1
-    let link_str = matchstrpos(cur_line, b:link_regex, temp_col)
+    let link_str = matchstrpos(cur_line, g:ntr_link_rx, temp_col)
 
     "if we can't find anymore link, we exit the function with failure
     if link_str[1] == -1
@@ -75,9 +78,11 @@ function! notoire#open_link(cmd)
   " TODO should do error handling if the variable for the folder isn't correct
   let link = notoire#get_link_under_cursor()
   if link != -1
-    let note_id = matchstr(link, b:note_id_regex)
+    let note_id = matchstr(link, g:ntr_note_id_rx)
     if note_id != ""
       exe a:cmd g:notoire_folder . note_id[1:-2] . ".note"
+    elseif
+      "TODO display error message
     endif
   endif
 endfunction
@@ -112,6 +117,7 @@ endfunction
 function! notoire#create_link(cmd)
   let new_note_id = notoire#get_next_note_id()
   exe "normal! \ei[\e`>lli](" . new_note_id . ")\e"
+  write
   exe a:cmd g:notoire_folder . "/" . new_note_id . ".note"
 endfunction
 
