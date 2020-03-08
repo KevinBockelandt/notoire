@@ -1,0 +1,162 @@
+*notoire.txt*    A vim plugin to take notes using the Zettelkasten method
+
+                       __      _        _                                   ~
+                    /\ \ \___ | |_ ___ (_)_ __ ___                          ~
+                   /  \/ / _ \| __/ _ \| | '__/ _ \                         ~
+                  / /\  / (_) | || (_) | | | |  __/                         ~
+                  \_\ \/ \___/ \__\___/|_|_|  \___|                         ~
+                                                                            ~
+
+         Version: 0.5 - License: MIT - Author: Kevin Bockelandt
+
+=============================================================================
+CONTENTS                                                   *notoire-contents*
+
+  1. Introduction ................ | notoire-introduction |
+  2. Concepts .................... | notoire-concepts |
+    2.1 Note file format ......... | notoire-file-format |
+    2.2 Directory structure ...... | notoire-directory |
+    2.3 Index note ............... | notoire-index |
+  3. Commands .................... | notoire-commands |
+  4. Setup ....................... | notoire-setup |
+    4.1 Options .................. | notoire-options |
+    4.2 Mapping .................. | notoire-mapping |
+  5. Contributing ................ | notoire-contributing |
+
+
+=============================================================================
+1. Introduction                                        *notoire-introduction*
+
+  DISCLAIMER: even though this plugin has reached a usable stage, it is
+  still far from being over. Some key features are missing and there are
+  probably some lizards lurking arround.
+
+In a nutshell, the idea behind this plugin is to keep all the notes in a
+single folder as a flat hierarchy and connect them using links, the same way
+a wiki does. There are no subfolders and no built-in mecanism for tags.
+
+For explanations on the Zettelkasten method and the way you should approach
+note taking with this system, you should look it up online and / or read the
+book "How to take smart notes" by Sönke Ahrens.
+
+
+=============================================================================
+2. Concepts                                                *notoire-concepts*
+
+-----------------------------------------------------------------------------
+2.1. Note files                                          *notoire-note-files*
+
+The notes are stored in plain text files that are treated as markdown. That
+being said, beyond the way links are formatted you are free to write the
+content of the notes any way you want.
+
+Each note is a separate file and each file has a name that is an hexadecimal
+number. It is highly discouraged to create files by hand. It is better to let
+the plugin do it as it will automatically scan the content of the note
+folder to determine the next id to use.
+
+For that reason, things will also probably not work as intended if you put
+unexpected things in the note folder. Whether it's files that are not notes,
+subfolders, etc.
+
+-----------------------------------------------------------------------------
+2.2. Directory structure                                  *notoire-directory*
+
+For reasons explained in |notoire-note-files| you should not manipulate
+manually files in the note folder handled by the plugin. As such the
+following directory structure is recommended:
+>
+    └── notes
+        ├── notoire
+        ├── img
+        └── misc
+<
+This way you can keep the notes handled by the plugin in the `notoire` folder
+and include in them references to pictures or other files. On top of it, it
+makes it easy to backup everything using a file synchronisation service or a
+git repo that you automatically upload somewhere periodically.
+
+-----------------------------------------------------------------------------
+2.3. Index note                                               *notoire-index*
+
+The note in file `0.note` is considered as the 'index note' by Notoire. There
+is a dedicated command to access it: |:NotoireOpenIndex|.
+
+Technically speaking it's just a note like any other, so you can choose to use
+it any way you want (including not at all). That being said it is recommended
+to use it as an entry point in you note system and / or as a temporary inbox
+where to write reminders regarding notes you cannot create right away.
+
+
+=============================================================================
+3. Commands                                                *notoire-commands*
+
+*:NotoireOpenIndex*         Open the index note
+*:NotoireOpenIndexSplit*    Same thing in a split
+*:NotoireOpenIndexVsplit*   Same thing in a vertical split
+
+*:NotoireOpenLink*          Open link under cursor
+*:NotoireOpenLinkSplit*     Same thing in a split
+*:NotoireOpenLinkVsplit*    Same thing in a vertical split
+
+*:NotoireCreateNote*        Create a new note
+*:NotoireCreateNoteSplit*   Same thing in a split
+*:NotoireCreateNoteVsplit*  Same thing in a vertical split
+
+*:NotoireCreateLink*        Create a link out of the visual selection to a
+                            new note and open that note 
+*:NotoireCreateLinkSplit*   Same thing in a split
+*:NotoireCreateLinkVsplit*  Same thing in a vertical split
+
+*:NotoireNextLink*          Go to the next link in the note
+*:NotoirePrevLink*          Go to the previous link in the note
+
+
+=============================================================================
+4. Setup                                                      *notoire-setup*
+
+Notoire does not provide any default configuration. Which means you NEED to
+set it up in order to use it.
+
+-----------------------------------------------------------------------------
+4.1. Options                                                *notoire-options*
+
+The option g:notoire_folder defines the path to the folder containing the
+notes. See |notoire-directory| for advice on usage. Exemple:
+
+    `let g:notoire_folder = '~/Dropbox/notes/notoire/'`
+
+-----------------------------------------------------------------------------
+4.2. Mapping                                                *notoire-mapping*
+
+Unless you want to use a specific mapping, the following one is recommended:
+>
+    nnoremap <Leader>l :NotoireNextLink<cr>
+    nnoremap <Leader>h :NotoirePrevLink<cr>
+     
+    nnoremap <Leader>j :NotoireOpenLink<cr>
+    nnoremap <Leader>sj :NotoireOpenLinkSplit<cr>
+    nnoremap <Leader>vj :NotoireOpenLinkVsplit<cr>
+     
+    vnoremap <Leader>j :NotoireCreateLink<cr>
+    vnoremap <Leader>sj :NotoireCreateLinkSplit<cr>
+    vnoremap <Leader>vj :NotoireCreateLinkVsplit<cr>
+     
+    nnoremap <Leader><Tab> :NotoireOpenIndex<cr>
+    nnoremap <Leader>s<Tab> :NotoireOpenIndexSplit<cr>
+    nnoremap <Leader>v<Tab> :NotoireOpenIndexVsplit<cr>
+<
+Note that the operations |:NotoireCreateLink| and |:NotoireOpenLink| use the
+same keys. The difference being one works in normal mode and the other in
+visual mode. Regardless of the mappings you want to use, |:NotoireCreateLink|
+will only work when called in visual mode.
+
+
+=============================================================================
+5. Contributing                                        *notoire-contributing*
+
+The project is hosted here: https://github.com/KevinBockelandt/notoire
+
+TODO: issues and PR and feedback
+
+vim:tw=78:ts=8:ft=help
