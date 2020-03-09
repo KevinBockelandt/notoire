@@ -27,8 +27,10 @@ endfunction
 function! notoire#go_to_link(search_flags)
   let save_cursor = getcurpos()
 
-  " TODO ugly hack to go to the first char of the link in most cases.
-  " Need to check if we are currently on a link and if yes position to start
+  " Searching backward will not exclude the first match as long as it doesn't
+  " start directly under the cursor. The following ugly hack is used to
+  " position the cursor on the first chara of the link assuming it's on the
+  " second, which will be the case after an automatic search
   if a:search_flags == 'b'
     normal! h
   endif

@@ -64,9 +64,9 @@ nnoremap <Leader>j :NotoireOpenLink<cr>
 nnoremap <Leader>sj :NotoireOpenLinkSplit<cr>
 nnoremap <Leader>vj :NotoireOpenLinkVsplit<cr>
 
-vnoremap <Leader>j :NotoireCreateLink<cr>
-vnoremap <Leader>sj :NotoireCreateLinkSplit<cr>
-vnoremap <Leader>vj :NotoireCreateLinkVsplit<cr>
+vnoremap <Leader>j :<C-U>NotoireCreateLink<cr>
+vnoremap <Leader>sj :<C-U>NotoireCreateLinkSplit<cr>
+vnoremap <Leader>vj :<C-U>NotoireCreateLinkVsplit<cr>
 
 nnoremap <Leader><Tab> :NotoireOpenIndex<cr>
 nnoremap <Leader>s<Tab> :NotoireOpenIndexSplit<cr>
