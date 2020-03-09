@@ -128,7 +128,7 @@ endfunction
 " note by default
 function! notoire#create_link(cmd)
   let new_note_id = notoire#get_next_note_id()
-  exe "normal! \ei[\e`>lli](" . new_note_id . ")\e"
+  exe "normal! \ei[\e`>la](" . new_note_id . ")\e"
   write
   exe a:cmd g:notoire_folder . "/" . new_note_id . ".note"
 endfunction
