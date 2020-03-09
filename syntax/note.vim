@@ -13,6 +13,7 @@ highlight link md_quote Comment
 
 syntax match md_list "^\ *\*\ "
 syntax match md_list "^\ *-\ "
+syntax match md_list "^\ *\d*\.\ "
 highlight link md_list Identifier
 
 syntax match md_italic "\<_.\{-}_\>"
