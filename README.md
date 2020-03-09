@@ -43,9 +43,9 @@ Then run :PlugInstall.
 :NotoirePrevLink     | Go to the previous link in the note 
 ```
 
-Note that `:NotoireCreateLink` will only work if you have a visual selection when you call it.
-
-Every command that opens a new buffer also have a version to open that buffer in a split. See the [documentation](./doc/notoire.txt) for more details.
+* `:NotoireCreateLink` will only work if you have a visual selection when you call it.
+* `:NotoireNextLink` and `:NotoirePrevLink` can be prefixed by a number to repeat the operation, like a regular vim navigation shortcut. Please be careful to use the proper [mapping](#setup).
+* Every command that opens a new buffer also have a version to open that buffer in a split. See the [documentation](./doc/notoire.txt) for more details.
 
 
 ## Setup
@@ -57,8 +57,8 @@ Notoire does not provide a configuration by default, which means you __need__ to
 ```vim
 let g:notoire_folder = '~/Dropbox/notes/notoire/' " notes are kept in this folder
 
-nnoremap <Leader>l :NotoireNextLink<cr>
-nnoremap <Leader>h :NotoirePrevLink<cr>
+nnoremap <Leader>l :<C-U>NotoireNextLink(v:count1)<cr>
+nnoremap <Leader>h :<C-U>NotoirePrevLink(v:count1)<cr>
 
 nnoremap <Leader>j :NotoireOpenLink<cr>
 nnoremap <Leader>sj :NotoireOpenLinkSplit<cr>

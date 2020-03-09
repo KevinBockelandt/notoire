@@ -1,8 +1,8 @@
 let g:ntr_link_rx = '\[.\{-}\](.\{-})'
 let g:ntr_note_id_rx = '(\(\d\|[a-f]\)\+)$'
 
-command! NotoireNextLink call notoire#next_link()
-command! NotoirePrevLink call notoire#prev_link()
+command! -nargs=1 NotoireNextLink call notoire#next_link(<args>)
+command! -nargs=1 NotoirePrevLink call notoire#prev_link(<args>)
 
 command! NotoireOpenLink call notoire#open_link("edit")
 command! NotoireOpenLinkSplit call notoire#open_link("split")

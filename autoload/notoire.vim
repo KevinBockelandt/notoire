@@ -66,12 +66,22 @@ endfunction
 
 " --- COMMAND FUNCTIONS ------------------------------------------------------
 
-function! notoire#next_link()
-  call notoire#go_to_link('')
+" Go to the next link in the note. Repeated 'count' times
+function! notoire#next_link(count)
+  let c = str2nr(a:count)
+  while c > 0
+    call notoire#go_to_link('')
+    let c -= 1
+  endwhile
 endfunction
 
-function! notoire#prev_link()
-  call notoire#go_to_link('b')
+" Go to the previous link in the note. Repeated 'count' times
+function! notoire#prev_link(count)
+  let c = str2nr(a:count)
+  while c > 0
+    call notoire#go_to_link('b')
+    let c -= 1
+  endwhile
 endfunction
 
 function! notoire#open_link(cmd)

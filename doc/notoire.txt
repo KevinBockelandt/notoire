@@ -131,8 +131,8 @@ notes. See |notoire-directory| for advice on usage. Exemple:
 
 Unless you want to use a specific mapping, the following one is recommended:
 >
-    nnoremap <Leader>l :NotoireNextLink<cr>
-    nnoremap <Leader>h :NotoirePrevLink<cr>
+    nnoremap <Leader>l :<C-U>NotoireNextLink(v:count1)<cr>
+    nnoremap <Leader>h :<C-U>NotoirePrevLink(v:count1)<cr>
      
     nnoremap <Leader>j :NotoireOpenLink<cr>
     nnoremap <Leader>sj :NotoireOpenLinkSplit<cr>
