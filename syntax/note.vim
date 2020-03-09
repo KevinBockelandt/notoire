@@ -21,7 +21,13 @@ highlight link md_italic Conditional
 
 syntax match md_bold "\<__.\{-}__\>"
 syntax match md_bold "\*\*.\{-}\*\*"
-highlight link md_bold String
+highlight link md_bold Constant
 
 syntax match md_link "\[.\{-}\](.\{-})"
 highlight link md_link Label
+
+syntax match md_hor_rule "^----*$"
+highlight link md_hor_rule Statement
+
+syntax match md_inline_code "`.\{-}`"
+highlight link md_inline_code String
