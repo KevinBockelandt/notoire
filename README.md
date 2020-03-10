@@ -20,16 +20,16 @@ You could roughly describe a Zettelkasten as being an external brain. It is a **
 * this introductory video: [youtube.com/watch?v=rOSZOCoqOo8](https://www.youtube.com/watch?v=rOSZOCoqOo8)
 * this dedicated subreddit: [reddit.com/r/Zettelkasten/](https://www.reddit.com/r/Zettelkasten/)
 
-In Notoire, the notes are stored in plain text files and interpreted as **Markdown**. There is no hierarchy and no built-in tag system. Each note is identified by an **hexadecimal number** that is incremented with each one.
-
-Notes are connected by **links only** and you can navigate to and between them a number of ways:
+In Notoire, the notes are stored in plain text files and interpreted as **Markdown**. There is no hierarchy and no built-in tag system. Notes are connected by **links only** and you can navigate to and between them a number of ways:
 
 * by following a link to open the corresponding note
 * by going back to the previous note using an history system
 * by performing a search and selecting a note in the result list (⚠️ not implemented yet)
 * by listing notes linking to the current one and selecting a result (⚠️ not implemented yet)
 
-> ❓ The name of the plugin comes from the French word 'notoire' which can be translated in several ways including 'notable' and 'noteworthy'. Based on a number of French words ending in *'oire'*, one could also interpret the meaning of 'notoire' as 'a place where to put notes'.
+Each note is identified by an **hexadecimal number** that is incremented with each one.
+
+> ❓ The name of the plugin comes from the French word `notoire` which can be translated in several ways including `notable` and `noteworthy`. Based on a number of French words ending in `'oire'`, one could also interpret the meaning of notoire as `a place where to put notes`.
 
 ## Installation
 
