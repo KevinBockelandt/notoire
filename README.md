@@ -14,29 +14,20 @@ TODO: put some screenshot here once everything is done
 
 ## Introduction
 
-You could roughly describe a Zettelkasten as being an external brain. It is a **network** of notes where each note contains an **idea**. You can search it, expand it, make new connections, etc.
-
-For more details on the concept I recommend checking out:
+You could roughly describe a Zettelkasten as being an external brain. It is a **network** of notes where each note contains an **idea**. You can search it, expand it, make new connections, etc. For more details on the concept I recommend checking out:
 
 * the book "How to take smart notes" by Sönke Ahrens
 * this introductory video: [youtube.com/watch?v=rOSZOCoqOo8](https://www.youtube.com/watch?v=rOSZOCoqOo8)
 * this dedicated subreddit: [reddit.com/r/Zettelkasten/](https://www.reddit.com/r/Zettelkasten/)
 
+In Notoire, the notes are stored in plain text files and interpreted as **Markdown**. There is no hierarchy and no built-in tag system. Each note is identified by an **hexadecimal number** that is incremented with each one.
 
-There are several implementations of the Zettelkasten method, each varying slightly from the others. Here are the main points regarding the implementation of Notoire:
+Notes are connected by **links only** and you can navigate to and between them a number of ways:
 
-* Notes are stored in plain text files and interpreted as **Markdown**.
-* Every note is identified by an **hexadecimal number**, incremented with each note.
-* Notes are connected by **links only**. No hierarchy and no built-in tag system.
-* You can navigate back and forth between notes by **following links** and using an **history system**.
-
-
-Not yet implemented but will be there with version 1.0:
-
-* TODO details features to come
-* More to come with the following versions, check the [issue board](https://github.com/KevinBockelandt/notoire/issues) for details.
-
-> ❓ If you're interested in the Zettelkasten method but don't think this plugin is right for you I recommend looking up for other tools. There is a number of them out there with different characteristics and there will surely be one that fits your particular needs.
+* by following a link to open the corresponding note
+* by going back to the previous note using an history system
+* by performing a search and selecting a note in the result list (⚠️ not implemented yet)
+* by listing notes linking to the current one and selecting a result (⚠️ not implemented yet)
 
 
 ## Installation
@@ -88,7 +79,7 @@ nnoremap <Leader>vj :NotoireOpenLinkVsplit<cr>
 vnoremap <Leader>j :<C-U>NotoireCreateLink<cr>
 vnoremap <Leader>sj :<C-U>NotoireCreateLinkSplit<cr>
 vnoremap <Leader>vj :<C-U>NotoireCreateLinkVsplit<cr>
-     
+
 nnoremap <Leader>k :NotoirePrevNote<cr>
 nnoremap <Leader>sk :NotoirePrevNoteSplit<cr>
 nnoremap <Leader>vk :NotoirePrevNoteVsplit<cr>
@@ -103,4 +94,4 @@ See the [documentation](./doc/notoire.txt) for an exhaustive list of configurati
 
 ## Contributing
 
-TODO: talk about issues and feedback
+We are very much open to feedback! If you want to submit an idea for improvement or report a bug you've encountered, you can [open an issue](https://github.com/KevinBockelandt/notoire/issues).
