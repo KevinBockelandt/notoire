@@ -7,7 +7,7 @@
                   \_\ \/ \___/ \__\___/|_|_|  \___|                         ~
                                                                             ~
 
-         Version: 0.5 - License: MIT - Author: Kevin Bockelandt
+         Version: 0.7 - License: MIT - Author: Kevin Bockelandt
 
 =============================================================================
 CONTENTS                                                   *notoire-contents*
@@ -28,16 +28,20 @@ CONTENTS                                                   *notoire-contents*
 1. Introduction                                        *notoire-introduction*
 
   DISCLAIMER: even though this plugin has reached a usable stage, it is
-  still far from being over. Some key features are missing and there are
-  probably some lizards lurking around.
+  not complete. Some key features are missing and there are probably some
+  lizards lurking around.
 
-In a nutshell, the idea behind this plugin is to keep all the notes in a
-single folder as a flat hierarchy and connect them using links, the same way
-a wiki does. There are no subfolders and no built-in mecanism for tags.
+You could roughly sum up a Zettlekasten as being an external brain. It is a
+network of notes where each note contains an idea. You can search it, expand
+it, make new connections, etc.
 
-For explanations on the Zettelkasten method and the way you should approach
-note taking with this system, you should look it up online and / or read the
-book "How to take smart notes" by Sönke Ahrens.
+For more detailed explanations on the Zettelkasten method and the way you
+should approach note taking with this system, you can look it up online
+and / or read the book "How to take smart notes" by Sönke Ahrens.
+
+In a nutshell, this plugin will keep all the notes in a single folder as a
+flat hierarchy and connect them using links, the same way a wiki does.
+There are no hierarchy mechanisms and no built-in mechanism for tags.
 
 
 =============================================================================
@@ -55,9 +59,9 @@ number. It is highly discouraged to create files by hand. It is better to let
 the plugin do it as it will automatically scan the content of the note
 folder to determine the next id to use.
 
-For that reason, things will also probably not work as intended if you put
-unexpected things in the note folder. Whether it's files that are not notes,
-subfolders, etc.
+For that reason, the plugin will not work as intended if you put unexpected
+things in the note folder. Whether it's files that are not notes, subfolders,
+etc.
 
 -----------------------------------------------------------------------------
 2.2. Directory structure                                  *notoire-directory*
@@ -72,7 +76,7 @@ following directory structure is recommended:
         └── misc
 <
 This way you can keep the notes handled by the plugin in the `notoire` folder
-and include in them references to pictures or other files. On top of it, it
+and include references to pictures or other files in them. On top of it, it
 makes it easy to backup everything using a file synchronisation service or a
 git repo that you automatically upload somewhere periodically.
 

@@ -1,27 +1,47 @@
 # Notoire
 
-> ⚠️ We are currently in version 0.5, meaning the plugin has reached a usable state but is far from over. Some key features are missing and there are probably some lizards lurking around.
+> ⚠️ We are currently in version 0.7, meaning the plugin has reached a usable state but is not complete. Some key features are missing and there are probably some lizards lurking around.
 
 
 - [Introduction](#introduction)
 - [Installation](#installation)
 - [Commands](#commands)
 - [Setup](#setup)
+- [Contributing](#contributing)
 
+
+TODO: put some screenshot here once everything is done
 
 ## Introduction
 
-TODO: Talk about Zettelkasten
+You could roughly describe a Zettelkasten as being an external brain. It is a **network** of notes where each note contains an **idea**. You can search it, expand it, make new connections, etc.
 
-Key features:
+For more details on the concept I recommend checking out:
 
-* Notes are stored in plain text files and interpreted as __Markdown__.
-* Every note is identified by an __hexadecimal number__, incremented with each note.
-* Notes are connected by __links only__. No hierarchy and no tag system.
+* the book "How to take smart notes" by Sönke Ahrens
+* this introductory video: [youtube.com/watch?v=rOSZOCoqOo8](https://www.youtube.com/watch?v=rOSZOCoqOo8)
+* this dedicated subreddit: [reddit.com/r/Zettelkasten/](https://www.reddit.com/r/Zettelkasten/)
+
+
+There are several implementations of the Zettelkasten method, each varying slightly from the others. Here are the main points regarding the implementation of Notoire:
+
+* Notes are stored in plain text files and interpreted as **Markdown**.
+* Every note is identified by an **hexadecimal number**, incremented with each note.
+* Notes are connected by **links only**. No hierarchy and no built-in tag system.
+* You can navigate back and forth between notes by **following links** and using an **history system**.
+
+
+Not yet implemented but will be there with version 1.0:
+
+* TODO details features to come
 * More to come with the following versions, check the [issue board](https://github.com/KevinBockelandt/notoire/issues) for details.
+
+> ❓ If you're interested in the Zettelkasten method but don't think this plugin is right for you I recommend looking up for other tools. There is a number of them out there with different characteristics and there will surely be one that fits your particular needs.
 
 
 ## Installation
+
+Notoire follows the traditional vim plugin layout, so you should have no trouble installing it with your plugin manager of choice.
 
 Using [vim-plug](https://github.com/junegunn/vim-plug), add the following line in you vim-plug configuration:
 
@@ -29,7 +49,7 @@ Using [vim-plug](https://github.com/junegunn/vim-plug), add the following line i
 Plug 'KevinBockelandt/notoire'
 ```
 
-Then run :PlugInstall.
+Then run `:PlugInstall`.
 
 
 ## Commands
@@ -37,6 +57,7 @@ Then run :PlugInstall.
 ```
 :NotoireOpenIndex    | Open the index note
 :NotoireOpenLink     | Open link under cursor
+:NotoirePrevNote     | Go back to previous note. Useful after opening a link
 :NotoireCreateNote   | Create a new note
 :NotoireCreateLink   | Create a link to a new note out of the visual selection and open that note 
 :NotoireNextLink     | Go to the next link in the note
@@ -52,7 +73,7 @@ Then run :PlugInstall.
 
 TODO: talk about a proper directory structure
 
-Notoire does not provide a configuration by default, which means you __need__ to set it up. Here is a base config that you can adapt to your needs:
+Notoire does not provide a configuration by default, which means you **need** to set it up. Here is a base config that you can adapt to your needs:
 
 ```vim
 let g:notoire_folder = '~/Dropbox/notes/notoire/' " notes are kept in this folder
@@ -78,3 +99,8 @@ nnoremap <Leader>v<Tab> :NotoireOpenIndexVsplit<cr>
 ```
 
 See the [documentation](./doc/notoire.txt) for an exhaustive list of configuration options.
+
+
+## Contributing
+
+TODO: talk about issues and feedback
