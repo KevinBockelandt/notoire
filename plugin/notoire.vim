@@ -12,6 +12,10 @@ command! NotoireOpenIndex call notoire#open_index("edit")
 command! NotoireOpenIndexSplit call notoire#open_index("split")
 command! NotoireOpenIndexVsplit call notoire#open_index("vsplit")
 
+command! NotoirePrevNote call notoire#prev_note("edit")
+command! NotoirePrevNoteSplit call notoire#prev_note("split")
+command! NotoirePrevNoteVsplit call notoire#prev_note("vsplit")
+
 command! NotoireCreateNote call notoire#create_note("edit")
 command! NotoireCreateNoteSplit call notoire#create_note("split")
 command! NotoireCreateNoteVsplit call notoire#create_note("vsplit")

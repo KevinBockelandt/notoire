@@ -21,9 +21,30 @@ function! notoire#get_next_note_id()
 endfunction
 
 
+" --- HISTORY RELATED FUNCTIONS ----------------------------------------------
+
+" Open a file and update associated history
+function! notoire#open_file(cmd, filename)
+  let new_history = getbufvar("%", "history", []) " get history of current buf
+  call add (new_history, expand("%:p"))           " append filename of cur buf
+  exe a:cmd a:filename
+  call setbufvar("%", "history", new_history)     " set history on new buf
+endfunction
+
+" Go to the previous note in the history
+function! notoire#prev_note(cmd)
+  let history = getbufvar("%", "history", []) " get history of current buf
+  exe a:cmd history[-1]
+  if len(history) > 1                         " pop last item of history
+    let history = history[0:-2]
+  endif
+  call setbufvar("%", "history", history)     " set history on new buf
+endfunction
+
+
 " --- LINK RELATED FUNCTIONS -------------------------------------------------
 
-"Move the cursor to the next or previous link in the buffer
+" Move the cursor to the next or previous link in the buffer
 function! notoire#go_to_link(search_flags)
   let save_cursor = getcurpos()
 
@@ -43,7 +64,7 @@ function! notoire#go_to_link(search_flags)
   endif
 endfunction
 
-"Return the entire link (text included) under the cursor or -1 if there isn't
+" Return the entire link (text included) under the cursor or -1 if there isn't
 function! notoire#get_link_under_cursor()
   let cur_col = col('.')
   let cur_line = getline('.')
@@ -91,27 +112,28 @@ function! notoire#open_link(cmd)
   let link = notoire#get_link_under_cursor()
   if link != -1
     let note_id = matchstr(link, g:ntr_note_id_rx)
+
+    "if we found the note to open, update the history and open the note
     if note_id != ""
-      exe a:cmd g:notoire_folder . note_id[1:-2] . ".note"
+      call notoire#open_file(a:cmd, g:notoire_folder . note_id[1:-2] . ".note")
     elseif
       "TODO display error message
     endif
   endif
 endfunction
 
-" open or create the index file (always note 0)
+" Open or create the index file (always note 0)
 function! notoire#open_index(cmd)
   " TODO should do error handling if the variable for the folder isn't correct
-  exe a:cmd g:notoire_folder . "/0.note"
+  call notoire#open_file(a:cmd, g:notoire_folder . "/0.note")
 endfunction
 
-" check for various potential issues with the current setup
+" Check for various potential issues with the current setup
 function! notoire#check_health()
   " TODO check that there are only .note files in the folder
   " TODO no subfolder
   " TODO a note 0 that is the index
-  " TODO only base36 names and no gaps between them
-  " TODO find notes that are not linked anywhere (except 0)
+  " TODO only hexa names and no gaps between them
   " TODO find links that do not link anywhere
   " TODO check for empty notes
   echo "TODO - Should be performing the check"
@@ -120,16 +142,16 @@ endfunction
 function! notoire#create_note(cmd)
   " TODO should do error handling if the variable for the folder isn't correct
   let note_id = notoire#get_next_note_id()
-  exe a:cmd g:notoire_folder . "/" . note_id . ".note"
+  call notoire#open_file(a:cmd, g:notoire_folder . "/" . note_id . ".note")
 endfunction
 
-" create a link to a new note with the visual selection
+" Create a link to a new note with the visual selection
 " TODO ideally it would ask for the note to link to, instead of creating a new
 " note by default
 function! notoire#create_link(cmd)
   let new_note_id = notoire#get_next_note_id()
   exe "normal! \ei[\e`>la](" . new_note_id . ")\e"
   write
-  exe a:cmd g:notoire_folder . "/" . new_note_id . ".note"
+  call notoire#open_file(a:cmd, g:notoire_folder . "/" . new_note_id . ".note")
 endfunction
 
