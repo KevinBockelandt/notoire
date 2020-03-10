@@ -29,6 +29,7 @@ Notes are connected by **links only** and you can navigate to and between them a
 * by performing a search and selecting a note in the result list (⚠️ not implemented yet)
 * by listing notes linking to the current one and selecting a result (⚠️ not implemented yet)
 
+> ❓ The name of the plugin comes from the French word 'notoire' which can be translated in several ways including 'notable' and 'noteworthy'. Based on a number of French words ending in *'oire'*, one could also interpret the meaning of 'notoire' as 'a place where to put notes'.
 
 ## Installation
 
