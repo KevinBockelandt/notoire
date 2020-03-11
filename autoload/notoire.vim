@@ -27,7 +27,15 @@ endfunction
 function! notoire#open_file(cmd, filename)
   let new_history = getbufvar("%", "history", []) " get history of current buf
   call add (new_history, expand("%:p"))           " append filename of cur buf
+
+  " always save the current buffer before opening the new one. Except when the
+  " current buffer doesn't have a name
+  if expand('%:t') != ""
+    write
+  endif
+
   exe a:cmd a:filename
+  write
   call setbufvar("%", "history", new_history)     " set history on new buf
 endfunction
 
@@ -151,7 +159,6 @@ endfunction
 function! notoire#create_link(cmd)
   let new_note_id = notoire#get_next_note_id()
   exe "normal! \ei[\e`>la](" . new_note_id . ")\e"
-  write
   call notoire#open_file(a:cmd, g:notoire_folder . "/" . new_note_id . ".note")
 endfunction
 
