@@ -1,5 +1,3 @@
-" --- GENERIC FUNCTIONS ------------------------------------------------------
-
 " Notes are nammed with a UID. We look up the highest name in the note folder
 " and return the increment to get a new name. UIDs are in hexadecimal
 " Return a string representing the ID in hex
@@ -20,37 +18,19 @@ function! notoire#get_next_note_id()
   return printf("%x", biggestId + 1)
 endfunction
 
-
-" --- HISTORY RELATED FUNCTIONS ----------------------------------------------
-
-" Open a file and update associated history
-function! notoire#open_file(cmd, filename)
-  let new_history = getbufvar("%", "history", []) " get history of current buf
-  call add (new_history, expand("%:p"))           " append filename of cur buf
-
-  " always save the current buffer before opening the new one. Except when the
-  " current buffer doesn't have a name
-  if expand('%:t') != ""
-    write
-  endif
-
-  exe a:cmd a:filename
-  write
-  call setbufvar("%", "history", new_history)     " set history on new buf
-endfunction
-
-" Go to the previous note in the history
-function! notoire#prev_note(cmd)
-  let history = getbufvar("%", "history", []) " get history of current buf
-  exe a:cmd history[-1]
-  if len(history) > 1                         " pop last item of history
-    let history = history[0:-2]
-  endif
-  call setbufvar("%", "history", history)     " set history on new buf
+" Check for various potential issues with the current setup
+function! notoire#check_health()
+  " TODO check that there are only .note files in the folder
+  " TODO no subfolder
+  " TODO a note 0 that is the index
+  " TODO only hexa names and no gaps between them
+  " TODO find links that do not link anywhere
+  " TODO check for empty notes
+  echo "TODO - Should be performing the check"
 endfunction
 
 
-" --- LINK RELATED FUNCTIONS -------------------------------------------------
+" --- LINK FUNCTIONS --------------------------------------------------------
 
 " Move the cursor to the next or previous link in the buffer
 function! notoire#go_to_link(search_flags)
@@ -94,9 +74,6 @@ function! notoire#get_link_under_cursor()
   endwhile
 endfunction
 
-
-" --- COMMAND FUNCTIONS ------------------------------------------------------
-
 " Go to the next link in the note. Repeated 'count' times
 function! notoire#next_link(count)
   let c = str2nr(a:count)
@@ -114,6 +91,9 @@ function! notoire#prev_link(count)
     let c -= 1
   endwhile
 endfunction
+
+
+" --- OPEN FUNCTIONS --------------------------------------------------------
 
 function! notoire#open_link(cmd)
   " TODO should do error handling if the variable for the folder isn't correct
@@ -136,16 +116,80 @@ function! notoire#open_index(cmd)
   call notoire#open_file(a:cmd, g:notoire_folder . "/0.note")
 endfunction
 
-" Check for various potential issues with the current setup
-function! notoire#check_health()
-  " TODO check that there are only .note files in the folder
-  " TODO no subfolder
-  " TODO a note 0 that is the index
-  " TODO only hexa names and no gaps between them
-  " TODO find links that do not link anywhere
-  " TODO check for empty notes
-  echo "TODO - Should be performing the check"
+
+" --- SEARCH FUNCTIONS ------------------------------------------------------
+
+" Return a list where each item is the content of a note. Formatted in a way
+" that it can be used as a source for FZF
+function! notoire#notes_content()
+  let names = system("ls -1")
+  let names = split(names, "\n")
+  let content = []
+
+  for i in range(0, len(names) - 1)
+    let toAdd = fnamemodify(names[i], ":r") . " " . system("cat " . names[i])
+    call add(content, toAdd)
+  endfor
+  
+  call add(content, "NEW - select to create new note")
+  return content
 endfunction
+
+" Function called with the selection of FZF
+" param e is the selection of FZF. The first word is the id of the note
+function! notoire#process_fzf_choice(cmd, e)
+  let note_id = split(a:e)[0]
+
+  if note_id == "NEW"
+    let note_id = notoire#get_next_note_id()
+  endif
+
+  call notoire#open_file(a:cmd, g:notoire_folder . "/" . note_id . ".note")
+endfunction
+
+" Used to search or create a new note with FZF
+function! notoire#search_notes(cmd)
+  call fzf#run({
+    \ 'source': notoire#notes_content(),
+    \ 'sink': function('notoire#process_fzf_choice', [a:cmd]),
+    \ 'dir': g:notoire_folder,
+    \ 'options': '-e --ansi --color --preview="cat {1}.note"'
+  \ })
+endfunction
+
+
+" --- HISTORY FUNCTIONS -----------------------------------------------------
+
+" Open a file and update associated history
+function! notoire#open_file(cmd, filename)
+  let new_history = getbufvar("%", "history", []) " get history of current buf
+  call add (new_history, expand("%:p"))           " append filename of cur buf
+
+  " always save the current buffer before opening the new one. Except when the
+  " current buffer doesn't have a name
+  if expand('%:t') != ""
+    write
+  endif
+
+  exe a:cmd a:filename
+  write
+  call setbufvar("%", "history", new_history)     " set history on new buf
+endfunction
+
+" Go to the previous note in the history
+function! notoire#prev_note(cmd)
+  let history = getbufvar("%", "history", []) " get history of current buf
+  " TODO check history before accessing it. Otherwise out of range error if
+  " empty
+  exe a:cmd history[-1]
+  if len(history) > 1                         " pop last item of history
+    let history = history[0:-2]
+  endif
+  call setbufvar("%", "history", history)     " set history on new buf
+endfunction
+
+
+" --- CREATE FUNCTIONS ------------------------------------------------------
 
 function! notoire#create_note(cmd)
   " TODO should do error handling if the variable for the folder isn't correct
@@ -161,4 +205,3 @@ function! notoire#create_link(cmd)
   exe "normal! \ei[\e`>la](" . new_note_id . ")\e"
   call notoire#open_file(a:cmd, g:notoire_folder . "/" . new_note_id . ".note")
 endfunction
-

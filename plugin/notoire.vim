@@ -24,4 +24,8 @@ command! NotoireCreateLink call notoire#create_link("edit")
 command! NotoireCreateLinkSplit call notoire#create_link("split")
 command! NotoireCreateLinkVsplit call notoire#create_link("vsplit")
 
+command! NotoireSearchNotes call notoire#search_notes("edit")
+command! NotoireSearchNotesSplit call notoire#search_notes("split")
+command! NotoireSearchNotesVsplit call notoire#search_notes("vsplit")
+
 command! NotoireCheckHealth call notoire#check_health()
