@@ -117,9 +117,41 @@ function! notoire#open_index(cmd)
   call notoire#open_file(a:cmd, g:notoire_folder . "/0.note")
 endfunction
 
-" Used to search or create a new note with FZF
+
+" --- SEARCH FUNCTIONS -------------------------------------------------------
+
+" Search or create a new note with FZF
 function! notoire#search_notes(cmd)
-  call notoire#run_fzf(a:cmd, 0)
+  call notoire#run_fzf(notoire#notes_content(), a:cmd, 0)
+endfunction
+
+" List all the links present in the current note
+function! notoire#search_links_in_note(cmd)
+  let cur_file = expand('%:p')
+  if cur_file == ""
+    return
+  endif
+
+  " use an external command to get the list of links in the current file
+  let links = system('rg -o -e "\[.+?\]\(.+?\)" ' . cur_file)
+  let links = split(links, "\n")
+
+  " format each link match to use it as input for fzf
+  for i in range(0, len(links) - 1)
+    let link = links[i]
+
+    " get informations about the id part of the link. Return an array
+    " [0] the string matching the pattern
+    " [1] index of first char of the match
+    " [2] index of last char of the match
+    let id_info = matchstrpos(link, '(\x\{-})$')
+
+    let id_part = id_info[0][1:-2] . " "
+    let text_part = link[0:id_info[1] - 1]
+    let links[i] = id_part . text_part
+  endfor
+
+  call notoire#run_fzf(links, a:cmd, 0)
 endfunction
 
 
@@ -160,8 +192,8 @@ function! notoire#process_fzf_choice(cmd, is_for_link, e)
   call notoire#open_file(a:cmd, g:notoire_folder . "/" . note_id . ".note")
 endfunction
 
-" Search for a note in all notes
-function! notoire#run_fzf(cmd, is_for_link)
+" Return a string with the options to use when running fzf
+function! notoire#get_fzf_opt()
   let o_pw = " --preview-window=down:60%:wrap"
   let o_p = ' --preview="fmt {1}.note"'
   let o_base = ' -e +m --cycle'
@@ -173,11 +205,16 @@ function! notoire#run_fzf(cmd, is_for_link)
     let o_col = " " . g:notoire_color
   endif
 
+  return o_base . o_dsp . o_p . o_pw . o_col
+endfunction
+
+" Search for a note in all notes
+function! notoire#run_fzf(source, cmd, is_for_link)
   call fzf#run({
-    \ 'source': notoire#notes_content(),
+    \ 'source': a:source,
     \ 'sink': function('notoire#process_fzf_choice', [a:cmd, a:is_for_link]),
     \ 'dir': g:notoire_folder,
-    \ 'options': o_base . o_dsp . o_p . o_pw . o_col
+    \ 'options': notoire#get_fzf_opt()
   \ })
 endfunction
 
@@ -226,5 +263,5 @@ endfunction
 " Create link to a note (selected through search or new) out of the
 " visual selection
 function! notoire#create_link(cmd)
-  call notoire#run_fzf(a:cmd, 1)
+  call notoire#run_fzf(notoire#notes_content(), a:cmd, 1)
 endfunction
