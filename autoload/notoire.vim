@@ -154,6 +154,28 @@ function! notoire#search_links_in_note(cmd)
   call notoire#run_fzf(links, a:cmd, 0)
 endfunction
 
+" List all the notes linking to the current one
+function! notoire#search_notes_linking_here(cmd)
+  let cur_file = expand('%:t:r')
+  if cur_file == ""
+    return
+  endif
+
+  " use external command rg to find links to the current note
+  let results = system('rg -e "\[.+?\]\(' . cur_file . '\)" ' . g:notoire_folder)
+  let results = split(results, "\n")
+
+  " format the rg results to use as input of fzf
+  for i in range(0, len(results) - 1)
+    let res_parts = split(results[i], ":")
+    let res_filename = split(res_parts[0], "\/")[-1]
+    let res_filename = fnamemodify(res_filename, ":r")
+    let results[i] = res_filename . " " . res_parts[1]
+  endfor
+
+  call notoire#run_fzf(results, a:cmd, 0)
+endfunction
+
 
 " --- FZF RELATED FUNCTIONS --------------------------------------------------
 
