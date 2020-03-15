@@ -95,6 +95,7 @@ endfunction
 
 " --- OPEN FUNCTIONS --------------------------------------------------------
 
+" Open the link under the cursor
 function! notoire#open_link(cmd)
   " TODO should do error handling if the variable for the folder isn't correct
   let link = notoire#get_link_under_cursor()
@@ -118,7 +119,7 @@ endfunction
 
 " Used to search or create a new note with FZF
 function! notoire#search_notes(cmd)
-  call notoire#run_fzf(a:cmd)
+  call notoire#run_fzf(a:cmd, 0)
 endfunction
 
 
@@ -141,19 +142,26 @@ function! notoire#notes_content()
 endfunction
 
 " Function called with the selection of FZF
+" param cmd is the command used to open the file
+" param is_for_link is a boolean to indicate if we create a link or not
 " param e is the selection of FZF. The first word is the id of the note
-function! notoire#process_fzf_choice(cmd, e)
+function! notoire#process_fzf_choice(cmd, is_for_link, e)
   let note_id = split(a:e)[0]
 
   if note_id == "NEW"
     let note_id = notoire#get_next_note_id()
   endif
 
+  " if we use the choice to create a link, edit the visually selected text
+  if a:is_for_link > 0
+    exe "normal! \ei[\e`>la](" . note_id . ")\e"
+  endif
+
   call notoire#open_file(a:cmd, g:notoire_folder . "/" . note_id . ".note")
 endfunction
 
 " Search for a note in all notes
-function! notoire#run_fzf(cmd)
+function! notoire#run_fzf(cmd, is_for_link)
   let o_pw = " --preview-window=down:60%:wrap"
   let o_p = ' --preview="fmt {1}.note"'
   let o_base = ' -e +m --cycle'
@@ -167,7 +175,7 @@ function! notoire#run_fzf(cmd)
 
   call fzf#run({
     \ 'source': notoire#notes_content(),
-    \ 'sink': function('notoire#process_fzf_choice', [a:cmd]),
+    \ 'sink': function('notoire#process_fzf_choice', [a:cmd, a:is_for_link]),
     \ 'dir': g:notoire_folder,
     \ 'options': o_base . o_dsp . o_p . o_pw . o_col
   \ })
@@ -208,17 +216,15 @@ endfunction
 
 " --- CREATE FUNCTIONS ------------------------------------------------------
 
+" Create a new note and open it
 function! notoire#create_note(cmd)
   " TODO should do error handling if the variable for the folder isn't correct
   let note_id = notoire#get_next_note_id()
   call notoire#open_file(a:cmd, g:notoire_folder . "/" . note_id . ".note")
 endfunction
 
-" Create a link to a new note with the visual selection
-" TODO ideally it would ask for the note to link to, instead of creating a new
-" note by default
+" Create link to a note (selected through search or new) out of the
+" visual selection
 function! notoire#create_link(cmd)
-  let new_note_id = notoire#get_next_note_id()
-  exe "normal! \ei[\e`>la](" . new_note_id . ")\e"
-  call notoire#open_file(a:cmd, g:notoire_folder . "/" . new_note_id . ".note")
+  call notoire#run_fzf(a:cmd, 1)
 endfunction
