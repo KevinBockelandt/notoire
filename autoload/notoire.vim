@@ -195,8 +195,9 @@ endfunction
 " Go to the previous note in the history
 function! notoire#prev_note(cmd)
   let history = getbufvar("%", "history", []) " get history of current buf
-  " TODO check history before accessing it. Otherwise out of range error if
-  " empty
+  if len(history) <= 0                        " if no history we quit
+    return
+  endif
   exe a:cmd history[-1]
   if len(history) > 1                         " pop last item of history
     let history = history[0:-2]
