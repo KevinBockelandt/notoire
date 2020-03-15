@@ -116,8 +116,13 @@ function! notoire#open_index(cmd)
   call notoire#open_file(a:cmd, g:notoire_folder . "/0.note")
 endfunction
 
+" Used to search or create a new note with FZF
+function! notoire#search_notes(cmd)
+  call notoire#run_fzf(a:cmd)
+endfunction
 
-" --- SEARCH FUNCTIONS ------------------------------------------------------
+
+" --- FZF RELATED FUNCTIONS --------------------------------------------------
 
 " Return a list where each item is the content of a note. Formatted in a way
 " that it can be used as a source for FZF
@@ -147,13 +152,24 @@ function! notoire#process_fzf_choice(cmd, e)
   call notoire#open_file(a:cmd, g:notoire_folder . "/" . note_id . ".note")
 endfunction
 
-" Used to search or create a new note with FZF
-function! notoire#search_notes(cmd)
+" Search for a note in all notes
+function! notoire#run_fzf(cmd)
+  let o_pw = " --preview-window=down:60%:wrap"
+  let o_p = ' --preview="fmt {1}.note"'
+  let o_base = ' -e +m --cycle'
+  let o_dsp = ' --no-bold --info="inline"'
+  let o_col = " --color=border:#FF8888,hl:#FFF714,hl+:#FFF714"
+
+  " apply user defined color scheme if it exists
+  if exists('g:notoire_color')
+    let o_col = " " . g:notoire_color
+  endif
+
   call fzf#run({
     \ 'source': notoire#notes_content(),
     \ 'sink': function('notoire#process_fzf_choice', [a:cmd]),
     \ 'dir': g:notoire_folder,
-    \ 'options': '-e --ansi --color --preview="cat {1}.note"'
+    \ 'options': o_base . o_dsp . o_p . o_pw . o_col
   \ })
 endfunction
 

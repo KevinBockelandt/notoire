@@ -107,6 +107,11 @@ where to write reminders regarding notes you cannot create right away.
 *:NotoireCreateNoteSplit*   Same thing in a split
 *:NotoireCreateNoteVsplit*  Same thing in a vertical split
 
+*:NotoireSearchNotes*       Interactively search for a note or create a new
+                          one
+*:NotoireSearchNotesSplit*  Same thing in a split
+*:NotoireSearchNotesVsplit* Same thing in a vertical split
+
 *:NotoireCreateLink*        Create a link to a new note out of the visual
                           selection and open that note 
 *:NotoireCreateLinkSplit*   Same thing in a split
@@ -125,10 +130,17 @@ set it up in order to use it.
 -----------------------------------------------------------------------------
 4.1. Options                                                *notoire-options*
 
-The option g:notoire_folder defines the path to the folder containing the
+The option `g:notoire_folder` defines the path to the folder containing the
 notes. See |notoire-directory| for advice on usage. Exemple:
-
-    `let g:notoire_folder = '~/Dropbox/notes/notoire/'`
+>
+    let g:notoire_folder = '~/Dropbox/notes/notoire/'
+<
+The optional option `g:notoire_color` allows you to specify a custom color
+scheme for fzf. It follows the syntax used by fzf, available in it's
+documentation. Exemple:
+>
+    let g:notoire_color = "--color=border:#FF8888,hl:#FFF714,hl+:#FFF714"
+<
 
 -----------------------------------------------------------------------------
 4.2. Mapping                                                *notoire-mapping*
@@ -145,11 +157,15 @@ Unless you want to use a specific mapping, the following one is recommended:
     vnoremap <Leader>j :<C-U>NotoireCreateLink<cr>
     vnoremap <Leader>sj :<C-U>NotoireCreateLinkSplit<cr>
     vnoremap <Leader>vj :<C-U>NotoireCreateLinkVsplit<cr>
+
+    nnoremap <Leader>i :<C-U>NotoireSearchNotes<cr>
+    nnoremap <Leader>si :<C-U>NotoireSearchNotesSplit<cr>
+    nnoremap <Leader>vi :<C-U>NotoireSearchNotesVsplit<cr>
      
     nnoremap <Leader>k :NotoirePrevNote<cr>
     nnoremap <Leader>sk :NotoirePrevNoteSplit<cr>
     nnoremap <Leader>vk :NotoirePrevNoteVsplit<cr>
-     
+
     nnoremap <Leader><Tab> :NotoireOpenIndex<cr>
     nnoremap <Leader>s<Tab> :NotoireOpenIndexSplit<cr>
     nnoremap <Leader>v<Tab> :NotoireOpenIndexVsplit<cr>
