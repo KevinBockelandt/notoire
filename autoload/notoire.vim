@@ -122,12 +122,12 @@ endfunction
 " Return a list where each item is the content of a note. Formatted in a way
 " that it can be used as a source for FZF
 function! notoire#notes_content()
-  let names = system("ls -1")
+  let names = system("ls -1 " . g:notoire_folder)
   let names = split(names, "\n")
   let content = []
 
   for i in range(0, len(names) - 1)
-    let toAdd = fnamemodify(names[i], ":r") . " " . system("cat " . names[i])
+    let toAdd = fnamemodify(names[i], ":r") . " " . system("cat " . g:notoire_folder. names[i])
     call add(content, toAdd)
   endfor
   
