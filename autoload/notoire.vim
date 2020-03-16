@@ -1,29 +1,42 @@
-" Notes are nammed with a UID. We look up the highest name in the note folder
-" and return the increment to get a new name. UIDs are in hexadecimal
-" Return a string representing the ID in hex
+" Return a string representing an ID usable for a new note
 function! notoire#get_next_note_id()
-  " TODO check the scope of variables
-  let paths = globpath(g:notoire_folder, '*.note', 0, 1)
-  let biggestId = 0
+  let existing_ids = notoire#get_id_existing_notes()
+  let biggest_id = 0
 
-  for path in paths
-    " only keep the id in the filename and convert to decimal for comparison
-    let filename = str2nr(fnamemodify(path, ':t:r'), 16)
-
-    if filename > biggestId
-      let biggestId = filename
+  " go through all existing ids to find the biggest one
+  for id_str in existing_ids
+    let id_num = str2nr(id_str, 16)
+    if id_num > biggest_id
+      let biggest_id = id_num
     endif
   endfor
 
-  return printf("%x", biggestId + 1)
+  return printf("%x", biggest_id + 1)
+endfunction
+
+" Return the list of IDs matching the notes in the note folder
+function! notoire#get_id_existing_notes()
+  let note_ids = []
+
+  let filenames = system("ls -1 " . g:notoire_folder)
+  let filenames = split(filenames, "\n")
+
+  " check the filename is indeed a note and if yes keep only the id
+  for i in range(0, len(filenames) - 1)
+    if fnamemodify(filenames[i], ":e") == "note"
+      let root = fnamemodify(filenames[i], ":r")
+      let match_hex = matchstr(root, '\x\+')
+      if len(match_hex) == len(root)
+        call add(note_ids, root)
+      endif
+    endif
+  endfor
+
+  return note_ids
 endfunction
 
 " Check for various potential issues with the current setup
 function! notoire#check_health()
-  " TODO check that there are only .note files in the folder
-  " TODO no subfolder
-  " TODO a note 0 that is the index
-  " TODO only hexa names and no gaps between them
   " TODO find links that do not link anywhere
   " TODO check for empty notes
   echo "TODO - Should be performing the check"
@@ -162,7 +175,7 @@ function! notoire#search_notes_linking_here(cmd)
   endif
 
   " use external command rg to find links to the current note
-  let results = system('rg -e "\[.+?\]\(' . cur_file . '\)" ' . g:notoire_folder)
+  let results = system('rg -e "\[.+?\]\('.cur_file.'\)" '.g:notoire_folder.'/*.note')
   let results = split(results, "\n")
 
   " format the rg results to use as input of fzf
@@ -184,7 +197,7 @@ function! notoire#search_orphan_notes(cmd)
   let fzf_source = []   " list of strings used as source for fzf
 
   " perform a regex search once to get all links in every note
-  let links = system('rg -oIN -e "\[.+?\]\([0-9a-f]+?\)" ' . g:notoire_folder)
+  let links = system('rg -oIN -e "\[.+?\]\([0-9a-f]+?\)" '.g:notoire_folder.'/*.note')
   let links = split(links, "\n")
 
   " strip those links to keep only the note id
@@ -194,15 +207,11 @@ function! notoire#search_orphan_notes(cmd)
     call add(linked_ids, note_id)
   endfor
 
-  " get the full list of notes in the notoire folder
-  let filenames = system("ls -1 " . g:notoire_folder)
-  let filenames = split(filenames, "\n")
-
   " check for each note if it is referenced in a link or not
-  for i in range(0, len(filenames) - 1)
-    let file_id = fnamemodify(filenames[i], ":r")
-    if index(linked_ids, file_id) == -1
-      call add(orphan_ids, file_id)
+  let note_ids = notoire#get_id_existing_notes()
+  for i in range(0, len(note_ids) - 1)
+    if index(linked_ids, note_ids[i]) == -1
+      call add(orphan_ids, note_ids[i])
     endif
   endfor
 
@@ -222,12 +231,11 @@ endfunction
 " Return a list where each item is the content of a note. Formatted in a way
 " that it can be used as a source for FZF
 function! notoire#notes_content()
-  let names = system("ls -1 " . g:notoire_folder)
-  let names = split(names, "\n")
+  let note_ids = notoire#get_id_existing_notes()
   let content = []
 
-  for i in range(0, len(names) - 1)
-    let toAdd = fnamemodify(names[i], ":r") . " " . system("cat " . g:notoire_folder. names[i])
+  for i in range(0, len(note_ids) - 1)
+    let toAdd = note_ids[i]." ".system("cat ".g:notoire_folder.note_ids[i].".note")
     call add(content, toAdd)
   endfor
   
@@ -251,7 +259,7 @@ function! notoire#process_fzf_choice(cmd, is_for_link, e)
     exe "normal! \ei[\e`>la](" . note_id . ")\e"
   endif
 
-  call notoire#open_file(a:cmd, g:notoire_folder . "/" . note_id . ".note")
+  call notoire#open_file(a:cmd, g:notoire_folder."/".note_id.".note")
 endfunction
 
 " Return a string with the options to use when running fzf

@@ -14,9 +14,8 @@ CONTENTS                                                   *notoire-contents*
 
   1. Introduction ................ | notoire-introduction |
   2. Concepts .................... | notoire-concepts |
-    2.1 Note file format ......... | notoire-file-format |
-    2.2 Directory structure ...... | notoire-directory |
-    2.3 Index note ............... | notoire-index |
+    2.1 Note file format ......... | notoire-note-files |
+    2.2 Index note ............... | notoire-index |
   3. Commands .................... | notoire-commands |
   4. Setup ....................... | notoire-setup |
     4.1 Options .................. | notoire-options |
@@ -27,21 +26,17 @@ CONTENTS                                                   *notoire-contents*
 =============================================================================
 1. Introduction                                        *notoire-introduction*
 
-  DISCLAIMER: even though this plugin has reached a usable stage, it is
-  not complete. Some key features are missing and there are probably some
-  lizards lurking around.
-
 You could roughly sum up a Zettlekasten as being an external brain. It is a
 network of notes where each note contains an idea. You can search it, expand
 it, make new connections, etc.
 
+In a nutshell, this plugin will keep all the notes in markdown format in a
+single folder as a flat hierarchy and connect them using links, the same
+way a wiki does.
+
 For more detailed explanations on the Zettelkasten method and the way you
 should approach note taking with this system, you can look it up online
 and / or read the book "How to take smart notes" by Sönke Ahrens.
-
-In a nutshell, this plugin will keep all the notes in a single folder as a
-flat hierarchy and connect them using links, the same way a wiki does.
-There are no hierarchy mechanisms and no built-in mechanism for tags.
 
 
 =============================================================================
@@ -59,29 +54,8 @@ number. It is highly discouraged to create files by hand. It is better to let
 the plugin do it as it will automatically scan the content of the note
 folder to determine the next id to use.
 
-For that reason, the plugin will not work as intended if you put unexpected
-things in the note folder. Whether it's files that are not notes, subfolders,
-etc.
-
 -----------------------------------------------------------------------------
-2.2. Directory structure                                  *notoire-directory*
-
-For reasons explained in |notoire-note-files| you should not manipulate
-manually files in the note folder handled by the plugin. As such the
-following directory structure is recommended:
->
-    └── notes
-        ├── notoire
-        ├── img
-        └── misc
-<
-This way you can keep the notes handled by the plugin in the `notoire` folder
-and include references to pictures or other files in them. On top of it, it
-makes it easy to backup everything using a file synchronisation service or a
-git repo that you automatically upload somewhere periodically.
-
------------------------------------------------------------------------------
-2.3. Index note                                               *notoire-index*
+2.2. Index note                                               *notoire-index*
 
 The note in file `0.note` is considered as the 'index note' by Notoire. There
 is a dedicated command to access it: |:NotoireOpenIndex|.
@@ -95,45 +69,26 @@ where to write reminders regarding notes you cannot create right away.
 =============================================================================
 3. Commands                                                *notoire-commands*
 
-*:NotoireOpenIndex*         Open the index note
-*:NotoireOpenIndexSplit*    Same thing in a split
-*:NotoireOpenIndexVsplit*   Same thing in a vertical split
+*:NotoireNextLink*    Go to the next link in the note
+*:NotoirePrevLink*    Go to the previous link in the note
 
-*:NotoireOpenLink*          Open link under cursor
-*:NotoireOpenLinkSplit*     Same thing in a split
-*:NotoireOpenLinkVsplit*    Same thing in a vertical split
+The following commands can all be suffixed by 'Split' or 'Vsplit' in order
+to open the result in a split or vertical split. See |notoire-mapping| for
+exemples on how to use it.
 
-*:NotoireCreateNote*        Create a new note
-*:NotoireCreateNoteSplit*   Same thing in a split
-*:NotoireCreateNoteVsplit*  Same thing in a vertical split
-
-*:NotoireSearchNotes*       Interactively search for a note or create a new
-                          one
-*:NotoireSearchNotesSplit*  Same thing but open in a split
-*:NotoireSearchNotesVsplit* Same thing but open in a vertical split
-
-*:NotoireSearchLinksInNote*       Interactively search among all links present
-                                in the note and open one
-*:NotoireSearchLinksInNoteSplit*  Same thing but open in a split
-*:NotoireSearchLinksInNoteVsplit* Same thing but open in a vertical split
-
-*:NotoireSearchOrphanNotes*       Interactively search among notes that are
-                                not referenced in any link anywhere
-*:NotoireSearchOrphanNotesSplit*  Same thing but open in a split
-*:NotoireSearchOrphanNotesVsplit* Same thing but open in a vertical split
-
-*:NotoireSearchNotesLinkingHere*       Interactively search among notes that
-                                     contain links to the current note
-*:NotoireSearchNotesLinkingHereSplit*  Same thing but open in a split
-*:NotoireSearchNotesLinkingHereVsplit* Same thing but open in a vertical split
-
-*:NotoireCreateLink*        Create a link to a new or existing note out of
-                          the visual selection and open that note 
-*:NotoireCreateLinkSplit*   Same thing but open in a split
-*:NotoireCreateLinkVsplit*  Same thing but open in a vertical split
-
-*:NotoireNextLink*          Go to the next link in the note
-*:NotoirePrevLink*          Go to the previous link in the note
+*:NotoireOpenIndex* ------------ | Open the index note
+*:NotoireOpenLink* ------------- | Open link under cursor
+*:NotoireCreateNote* ----------- | Create a new note
+*:NotoireSearchNotes* ---------- | Interactively search for a note or create
+                               | a new one
+*:NotoireSearchLinksInNote* ---- | Interactively search among all links
+                               | present in the current note and open one
+*:NotoireSearchOrphanNotes* ---- | Interactively search among notes that are
+                               | not referenced in any link anywhere
+*:NotoireSearchNotesLinkingHere* | Interactively search among notes that
+                               | contain links to the current note
+*:NotoireCreateLink* ----------- | Create a link to a new or existing note
+                               | using visual selection and open that note
 
 
 =============================================================================
@@ -145,10 +100,10 @@ set it up in order to use it.
 -----------------------------------------------------------------------------
 4.1. Options                                                *notoire-options*
 
-The option `g:notoire_folder` defines the path to the folder containing the
-notes. See |notoire-directory| for advice on usage. Exemple:
+The mandatory option `g:notoire_folder` defines the path to the folder
+containing the notes. Exemple:
 >
-    let g:notoire_folder = '~/Dropbox/notes/notoire/'
+    let g:notoire_folder = '~/Dropbox/notoire/'
 <
 The optional option `g:notoire_color` allows you to specify a custom color
 scheme for fzf. It follows the syntax used by fzf, available in it's
