@@ -168,12 +168,52 @@ function! notoire#search_notes_linking_here(cmd)
   " format the rg results to use as input of fzf
   for i in range(0, len(results) - 1)
     let res_parts = split(results[i], ":")
+    let res_parts = join(res_parts[1:-1], '')
     let res_filename = split(res_parts[0], "\/")[-1]
     let res_filename = fnamemodify(res_filename, ":r")
     let results[i] = res_filename . " " . res_parts[1]
   endfor
 
   call notoire#run_fzf(results, a:cmd, 0)
+endfunction
+
+" List all the notes that are not linked anywhere
+function! notoire#search_orphan_notes(cmd)
+  let linked_ids = []   " note ids that are present in a link somewhere
+  let orphan_ids = []   " ids for notes that are not linked to anywhere
+  let fzf_source = []   " list of strings used as source for fzf
+
+  " perform a regex search once to get all links in every note
+  let links = system('rg -oIN -e "\[.+?\]\([0-9a-f]+?\)" ' . g:notoire_folder)
+  let links = split(links, "\n")
+
+  " strip those links to keep only the note id
+  for i in range(0, len(links) - 1)
+    let note_id = matchstr(links[i], '(\x\{-})$')
+    let note_id = note_id[1:-2]
+    call add(linked_ids, note_id)
+  endfor
+
+  " get the full list of notes in the notoire folder
+  let filenames = system("ls -1 " . g:notoire_folder)
+  let filenames = split(filenames, "\n")
+
+  " check for each note if it is referenced in a link or not
+  for i in range(0, len(filenames) - 1)
+    let file_id = fnamemodify(filenames[i], ":r")
+    if index(linked_ids, file_id) == -1
+      call add(orphan_ids, file_id)
+    endif
+  endfor
+
+  " format the results to be used as source for fzf
+  for i in range(0, len(orphan_ids) - 1)
+    let id = orphan_ids[i]
+    let entry = id . " " . system('head -n 1 ' . g:notoire_folder.id.'.note')
+    call add(fzf_source, entry)
+  endfor
+
+  call notoire#run_fzf(fzf_source, a:cmd, 0)
 endfunction
 
 

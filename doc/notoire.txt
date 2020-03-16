@@ -117,6 +117,11 @@ where to write reminders regarding notes you cannot create right away.
 *:NotoireSearchLinksInNoteSplit*  Same thing but open in a split
 *:NotoireSearchLinksInNoteVsplit* Same thing but open in a vertical split
 
+*:NotoireSearchOrphanNotes*       Interactively search among notes that are
+                                not referenced in any link anywhere
+*:NotoireSearchOrphanNotesSplit*  Same thing but open in a split
+*:NotoireSearchOrphanNotesVsplit* Same thing but open in a vertical split
+
 *:NotoireSearchNotesLinkingHere*       Interactively search among notes that
                                      contain links to the current note
 *:NotoireSearchNotesLinkingHereSplit*  Same thing but open in a split
@@ -175,6 +180,10 @@ Unless you want to use a specific mapping, the following one is recommended:
     nnoremap <Leader>u :NotoireSearchLinksInNote<cr>
     nnoremap <Leader>su :NotoireSearchLinksInNoteSplit<cr>
     nnoremap <Leader>vu :NotoireSearchLinksInNoteVsplit<cr>
+
+    nnoremap <Leader>o :NotoireSearchOrphanNotes<cr>
+    nnoremap <Leader>so :NotoireSearchOrphanNotesSplit<cr>
+    nnoremap <Leader>vo :NotoireSearchOrphanNotesVsplit<cr>
      
     nnoremap <Leader>y :NotoireSearchNotesLinkingHere<cr>
     nnoremap <Leader>sy :NotoireSearchNotesLinkingHereSplit<cr>

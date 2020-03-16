@@ -32,6 +32,10 @@ command! NotoireSearchLinksInNote call notoire#search_links_in_note("edit")
 command! NotoireSearchLinksInNoteSplit call notoire#search_links_in_note("split")
 command! NotoireSearchLinksInNoteVsplit call notoire#search_links_in_note("vsplit")
 
+command! NotoireSearchOrphanNotes call notoire#search_orphan_notes("edit")
+command! NotoireSearchOrphanNotesSplit call notoire#search_orphan_notes("split")
+command! NotoireSearchOrphanNotesVsplit call notoire#search_orphan_notes("vsplit")
+
 command! NotoireSearchNotesLinkingHere call notoire#search_notes_linking_here("edit")
 command! NotoireSearchNotesLinkingHereSplit call notoire#search_notes_linking_here("split")
 command! NotoireSearchNotesLinkingHereVsplit call notoire#search_notes_linking_here("vsplit")
