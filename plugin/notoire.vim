@@ -56,21 +56,21 @@ if exists('g:notoire_user_mapping') == 0
   nnoremap <Leader>sk :NotoirePrevNoteS<cr>
   nnoremap <Leader>vk :NotoirePrevNoteVS<cr>
 
-  nnoremap <Leader>i :NotoireSearchNotes<cr>
-  nnoremap <Leader>si :NotoireSearchNotesS<cr>
-  nnoremap <Leader>vi :NotoireSearchNotesVS<cr>
+  nnoremap <Leader>u :NotoireSearchNotes<cr>
+  nnoremap <Leader>su :NotoireSearchNotesS<cr>
+  nnoremap <Leader>vu :NotoireSearchNotesVS<cr>
 
-  nnoremap <Leader>u :NotoireSearchLinksInNote<cr>
-  nnoremap <Leader>su :NotoireSearchLinksInNoteS<cr>
-  nnoremap <Leader>vu :NotoireSearchLinksInNoteVS<cr>
+  nnoremap <Leader>o :NotoireSearchLinksInNote<cr>
+  nnoremap <Leader>so :NotoireSearchLinksInNoteS<cr>
+  nnoremap <Leader>vo :NotoireSearchLinksInNoteVS<cr>
 
   nnoremap <Leader>y :NotoireSearchNotesLinkingHere<cr>
   nnoremap <Leader>sy :NotoireSearchNotesLinkingHereS<cr>
   nnoremap <Leader>vy :NotoireSearchNotesLinkingHereVS<cr>
 
-  nnoremap <Leader>o :NotoireSearchOrphanNotes<cr>
-  nnoremap <Leader>so :NotoireSearchOrphanNotesS<cr>
-  nnoremap <Leader>vo :NotoireSearchOrphanNotesVS<cr>
+  nnoremap <Leader>i :NotoireSearchOrphanNotes<cr>
+  nnoremap <Leader>si :NotoireSearchOrphanNotesS<cr>
+  nnoremap <Leader>vi :NotoireSearchOrphanNotesVS<cr>
 
   nnoremap <Leader><Tab> :NotoireOpenIndex<cr>
   nnoremap <Leader>s<Tab> :NotoireOpenIndexS<cr>

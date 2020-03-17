@@ -15,7 +15,7 @@ You could roughly describe a Zettelkasten as being an external brain. It is a **
 
 TODO: screenshot here
 
-In Notoire, the notes are stored in plain text files and interpreted as **Markdown**. There is no hierarchy and no built-in tag system. Notes are connected by links and you can navigate to and between them a number of ways:
+In Notoire, the notes are stored in plain text files and interpreted as **Markdown**. There is no hierarchy and no built-in tag system. Notes are connected by links and you can navigate to and between them via a number of ways:
 
 * by following a link to open the corresponding note
 * by going back to the previous note using an history system
@@ -42,7 +42,7 @@ Then run `:PlugInstall`.
 
 In order to use all the features of Notoire you **need** two other tools installed on your machine:
 
-* **FZF** in order to present results of searches with fuzzy finding
+* **FZF** in order to present search results
 * **ripgrep** to perform efficient searches on notes
 
 FZF can be [easily installed](https://github.com/junegunn/fzf#installation) by vim-plug as well . Ripgrep can be [installed via a number of ways](https://github.com/BurntSushi/ripgrep#installation) including `cargo` if you are a Rust developper.
@@ -91,25 +91,25 @@ vnoremap <Leader>j :<C-U>NotoireCreateLink<cr>
 vnoremap <Leader>sj :<C-U>NotoireCreateLinkS<cr>
 vnoremap <Leader>vj :<C-U>NotoireCreateLinkVS<cr>
 
-nnoremap <Leader>i :NotoireSearchNotes<cr>
-nnoremap <Leader>si :NotoireSearchNotesS<cr>
-nnoremap <Leader>vi :NotoireSearchNotesVS<cr>
+nnoremap <Leader>k :NotoirePrevNote<cr>
+nnoremap <Leader>sk :NotoirePrevNoteS<cr>
+nnoremap <Leader>vk :NotoirePrevNoteVS<cr>
 
-nnoremap <Leader>u :NotoireSearchLinksInNote<cr>
-nnoremap <Leader>su :NotoireSearchLinksInNoteS<cr>
-nnoremap <Leader>vu :NotoireSearchLinksInNoteVS<cr>
+nnoremap <Leader>u :NotoireSearchNotes<cr>
+nnoremap <Leader>su :NotoireSearchNotesS<cr>
+nnoremap <Leader>vu :NotoireSearchNotesVS<cr>
 
-nnoremap <Leader>o :NotoireSearchOrphanNotes<cr>
-nnoremap <Leader>so :NotoireSearchOrphanNotesS<cr>
-nnoremap <Leader>vo :NotoireSearchOrphanNotesVS<cr>
- 
+nnoremap <Leader>o :NotoireSearchLinksInNote<cr>
+nnoremap <Leader>so :NotoireSearchLinksInNoteS<cr>
+nnoremap <Leader>vo :NotoireSearchLinksInNoteVS<cr>
+
 nnoremap <Leader>y :NotoireSearchNotesLinkingHere<cr>
 nnoremap <Leader>sy :NotoireSearchNotesLinkingHereS<cr>
 nnoremap <Leader>vy :NotoireSearchNotesLinkingHereVS<cr>
 
-nnoremap <Leader>k :NotoirePrevNote<cr>
-nnoremap <Leader>sk :NotoirePrevNoteS<cr>
-nnoremap <Leader>vk :NotoirePrevNoteVS<cr>
+nnoremap <Leader>i :NotoireSearchOrphanNotes<cr>
+nnoremap <Leader>si :NotoireSearchOrphanNotesS<cr>
+nnoremap <Leader>vi :NotoireSearchOrphanNotesVS<cr>
 
 nnoremap <Leader><Tab> :NotoireOpenIndex<cr>
 nnoremap <Leader>s<Tab> :NotoireOpenIndexS<cr>
@@ -120,7 +120,7 @@ Here is a diagram to help you see how it looks on a keyboard:
 
 TODO: diagram shortcuts
 
-If you wish for the plugin **not** to setup default mapping (to avoid conflict for exemple), you can use the `g:notoire_user_mapping`:
+If you wish for the plugin **not** to setup default mapping (to avoid conflict for exemple), you can use the `g:notoire_user_mapping`. It is then up to you to provide the mapping you want.
 
 ```vim
 let g:notoire_user_mapping = 1

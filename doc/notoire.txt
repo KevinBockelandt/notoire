@@ -13,6 +13,7 @@
 CONTENTS                                                   *notoire-contents*
 
   Introduction ............. | notoire-introduction |
+  Dependencies ............. | notoire-dependencies |
   Concepts ................. | notoire-concepts |
     Note file format ....... | notoire-note-files |
     Index note ............. | notoire-index |
@@ -36,6 +37,17 @@ way a wiki does.
 For more detailed explanations on the Zettelkasten method and the way you
 should approach note taking with this system, you can look it up online
 and / or read the book "How to take smart notes" by Sönke Ahrens.
+
+=============================================================================
+Dependencies                                           *notoire-dependencies*
+
+In order to use all the features of Notoire, you need to have two tools
+available on your machine: fzf (as a vim plugin) and ripgrep (as 'rg' command
+line tool). Check the corresponding documentation pages for ways of 
+installing them:
+
+https://github.com/junegunn/fzf#installation
+https://github.com/BurntSushi/ripgrep#installation
 
 
 =============================================================================
@@ -130,25 +142,25 @@ Notoire provides the following mapping by default:
     vnoremap <Leader>sj :<C-U>NotoireCreateLinkS<cr>
     vnoremap <Leader>vj :<C-U>NotoireCreateLinkVS<cr>
 
-    nnoremap <Leader>i :NotoireSearchNotes<cr>
-    nnoremap <Leader>si :NotoireSearchNotesS<cr>
-    nnoremap <Leader>vi :NotoireSearchNotesVS<cr>
+    nnoremap <Leader>k :NotoirePrevNote<cr>
+    nnoremap <Leader>sk :NotoirePrevNoteS<cr>
+    nnoremap <Leader>vk :NotoirePrevNoteVS<cr>
 
-    nnoremap <Leader>u :NotoireSearchLinksInNote<cr>
-    nnoremap <Leader>su :NotoireSearchLinksInNoteS<cr>
-    nnoremap <Leader>vu :NotoireSearchLinksInNoteVS<cr>
+    nnoremap <Leader>u :NotoireSearchNotes<cr>
+    nnoremap <Leader>su :NotoireSearchNotesS<cr>
+    nnoremap <Leader>vu :NotoireSearchNotesVS<cr>
 
-    nnoremap <Leader>o :NotoireSearchOrphanNotes<cr>
-    nnoremap <Leader>so :NotoireSearchOrphanNotesS<cr>
-    nnoremap <Leader>vo :NotoireSearchOrphanNotesVS<cr>
-     
+    nnoremap <Leader>o :NotoireSearchLinksInNote<cr>
+    nnoremap <Leader>so :NotoireSearchLinksInNoteS<cr>
+    nnoremap <Leader>vo :NotoireSearchLinksInNoteVS<cr>
+
     nnoremap <Leader>y :NotoireSearchNotesLinkingHere<cr>
     nnoremap <Leader>sy :NotoireSearchNotesLinkingHereS<cr>
     nnoremap <Leader>vy :NotoireSearchNotesLinkingHereVS<cr>
 
-    nnoremap <Leader>k :NotoirePrevNote<cr>
-    nnoremap <Leader>sk :NotoirePrevNoteS<cr>
-    nnoremap <Leader>vk :NotoirePrevNoteVS<cr>
+    nnoremap <Leader>i :NotoireSearchOrphanNotes<cr>
+    nnoremap <Leader>si :NotoireSearchOrphanNotesS<cr>
+    nnoremap <Leader>vi :NotoireSearchOrphanNotesVS<cr>
 
     nnoremap <Leader><Tab> :NotoireOpenIndex<cr>
     nnoremap <Leader>s<Tab> :NotoireOpenIndexS<cr>
