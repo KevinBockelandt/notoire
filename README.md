@@ -13,9 +13,9 @@ You could roughly describe a Zettelkasten as being an external brain. It is a **
 * this introductory video: [youtube.com/watch?v=rOSZOCoqOo8](https://www.youtube.com/watch?v=rOSZOCoqOo8)
 * this dedicated subreddit: [reddit.com/r/Zettelkasten/](https://www.reddit.com/r/Zettelkasten/)
 
-TODO: screenshot here
+![visual example](https://github.com/KevinBockelandt/notoire/blob/master/doc/visual_example.png)
 
-In Notoire, the notes are stored in plain text files and interpreted as **Markdown**. There is no hierarchy and no built-in tag system. Notes are connected by links and you can navigate to and between them via a number of ways:
+In Notoire, the notes are stored in plain text files and interpreted as **Markdown**. There is no hierarchy as notes are connected only by links. You can navigate to and between them via a number of ways:
 
 * by following a link to open the corresponding note
 * by going back to the previous note using an history system
@@ -118,7 +118,7 @@ nnoremap <Leader>v<Tab> :NotoireOpenIndexVS<cr>
 
 Here is a diagram to help you see how it looks on a keyboard:
 
-TODO: diagram shortcuts
+![diagram hotkeys](https://github.com/KevinBockelandt/notoire/blob/master/doc/hotkeys.png)
 
 If you wish for the plugin **not** to setup default mapping (to avoid conflict for exemple), you can use the `g:notoire_user_mapping`. It is then up to you to provide the mapping you want.
 
