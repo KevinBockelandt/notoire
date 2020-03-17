@@ -77,7 +77,10 @@ exemples on how to use it.
 
 *:NotoireOpenIndex* ------------ | Open the index note
 *:NotoireOpenLink* ------------- | Open link under cursor
+*:NotoirePrevNote* ------------- | Go back to the previously opened note
 *:NotoireCreateNote* ----------- | Create a new note
+*:NotoireCreateLink* ----------- | Create a link to a new or existing note
+                               | using visual selection and open that note
 *:NotoireSearchNotes* ---------- | Interactively search for a note or create
                                | a new one
 *:NotoireSearchLinksInNote* ---- | Interactively search among all links
@@ -86,8 +89,6 @@ exemples on how to use it.
                                | not referenced in any link anywhere
 *:NotoireSearchNotesLinkingHere* | Interactively search among notes that
                                | contain links to the current note
-*:NotoireCreateLink* ----------- | Create a link to a new or existing note
-                               | using visual selection and open that note
 
 
 =============================================================================

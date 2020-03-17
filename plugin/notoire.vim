@@ -39,8 +39,6 @@ command! NotoireSearchNotesLinkingHere call notoire#search_notes_linking_here("e
 command! NotoireSearchNotesLinkingHereS call notoire#search_notes_linking_here("split")
 command! NotoireSearchNotesLinkingHereVS call notoire#search_notes_linking_here("vsplit")
 
-command! NotoireCheckHealth call notoire#check_health()
-
 
 if exists('g:notoire_user_mapping') == 0
   nnoremap <Leader>l :<C-U>NotoireNextLink(v:count1)<cr>

@@ -1,18 +1,11 @@
 # Notoire
 
-> ⚠️ We are currently in version 0.7, meaning the plugin has reached a usable state but is not complete. Some key features are missing and there are probably some lizards lurking around.
+> ⚠️ The plugin is currently not compatible with Windows systems. We're working on it :)
+
+[Introduction](#introduction) | [Installation](#installation) | [Commands](#commands) | [Setup](#setup) | [Contributing](#contributing)
 
 
-- [Introduction](#introduction)
-- [Installation](#installation)
-- [Commands](#commands)
-- [Setup](#setup)
-- [Contributing](#contributing)
-
-
-TODO: put some screenshot here once everything is done
-
-## Introduction
+# Introduction
 
 You could roughly describe a Zettelkasten as being an external brain. It is a **network** of notes where each note contains an **idea**. You can search it, expand it, make new connections, etc. For more details on the concept I recommend checking out:
 
@@ -20,22 +13,23 @@ You could roughly describe a Zettelkasten as being an external brain. It is a **
 * this introductory video: [youtube.com/watch?v=rOSZOCoqOo8](https://www.youtube.com/watch?v=rOSZOCoqOo8)
 * this dedicated subreddit: [reddit.com/r/Zettelkasten/](https://www.reddit.com/r/Zettelkasten/)
 
-In Notoire, the notes are stored in plain text files and interpreted as **Markdown**. There is no hierarchy and no built-in tag system. Notes are connected by **links only** and you can navigate to and between them a number of ways:
+TODO: screenshot here
+
+In Notoire, the notes are stored in plain text files and interpreted as **Markdown**. There is no hierarchy and no built-in tag system. Notes are connected by links and you can navigate to and between them a number of ways:
 
 * by following a link to open the corresponding note
 * by going back to the previous note using an history system
-* by performing a search and selecting a note in the result list (⚠️ not implemented yet)
-* by listing notes linking to the current one and selecting a result (⚠️ not implemented yet)
+* by performing a search and selecting a note in the result list
+* by listing the links coming in or out of the current note and selecting one
 
-Each note is identified by an **hexadecimal number** that is incremented with each one.
+Each note is identified by an **hexadecimal number** that is incremented from one note to the other.
 
 > ❓ The name of the plugin comes from the French word `notoire` which can be translated in several ways including `notable` and `noteworthy`. Based on a number of French words ending in `'oire'`, one could also interpret the meaning of notoire as `a place where to put notes`.
 
+
 ## Installation
 
-Notoire follows the traditional vim plugin layout, so you should have no trouble installing it with your plugin manager of choice.
-
-Using [vim-plug](https://github.com/junegunn/vim-plug), add the following line in you vim-plug configuration:
+Notoire follows the traditional vim plugin layout, so you should have no trouble installing it with your plugin manager of choice. Using [vim-plug](https://github.com/junegunn/vim-plug), add the following line in you vim-plug configuration:
 
 ```vim
 Plug 'KevinBockelandt/notoire'
@@ -44,16 +38,30 @@ Plug 'KevinBockelandt/notoire'
 Then run `:PlugInstall`.
 
 
+### Dependencies
+
+In order to use all the features of Notoire you **need** two other tools installed on your machine:
+
+* **FZF** in order to present results of searches with fuzzy finding
+* **ripgrep** to perform efficient searches on notes
+
+FZF can be [easily installed](https://github.com/junegunn/fzf#installation) by vim-plug as well . Ripgrep can be [installed via a number of ways](https://github.com/BurntSushi/ripgrep#installation) including `cargo` if you are a Rust developper.
+
+
 ## Commands
 
 ```
-:NotoireOpenIndex    | Open the index note
-:NotoireOpenLink     | Open link under cursor
-:NotoirePrevNote     | Go back to previous note. Useful after opening a link
-:NotoireCreateNote   | Create a new note
-:NotoireCreateLink   | Create a link to a new note out of the visual selection and open that note 
-:NotoireNextLink     | Go to the next link in the note
-:NotoirePrevLink     | Go to the previous link in the note 
+:NotoireOpenIndex ------------ | Open the index note
+:NotoireOpenLink ------------- | Open link under cursor
+:NotoirePrevNote ------------- | Go back to the previously opened note
+:NotoireCreateNote ----------- | Create a new note
+:NotoireCreateLink ----------- | Create a link to a new or existing note using visual selection and open that note
+:NotoireNextLink ------------- | Go to the next link in the note
+:NotoirePrevLink ------------- | Go to the previous link in the note 
+:NotoireSearchNotes ---------- | Interactively search for a note or create a new one
+:NotoireSearchLinksInNote ---- | Interactively search among all links present in the current note and open one
+:NotoireSearchOrphanNotes ---- | Interactively search among notes that are not referenced in any link anywhere
+:NotoireSearchNotesLinkingHere | Interactively search among notes that
 ```
 
 * `:NotoireCreateLink` will only work if you have a visual selection when you call it.
@@ -63,31 +71,59 @@ Then run `:PlugInstall`.
 
 ## Setup
 
-TODO: talk about a proper directory structure
-
-Notoire does not provide a configuration by default, which means you **need** to set it up. Here is a base config that you can adapt to your needs:
+You **need** to define the option `g:notoire_folder` which represents the path of the folder where the notes should be kept. It's usually a good idea to use a folder that will be backed up automatically somehow. Ex:
 
 ```vim
-let g:notoire_folder = '~/Dropbox/notes/notoire/' " notes are kept in this folder
+let g:notoire_folder = '~/Dropbox/notes/notoire/'
+```
 
+Notoire provides the following mapping by default:
+
+```vim
 nnoremap <Leader>l :<C-U>NotoireNextLink(v:count1)<cr>
 nnoremap <Leader>h :<C-U>NotoirePrevLink(v:count1)<cr>
-
+ 
 nnoremap <Leader>j :NotoireOpenLink<cr>
-nnoremap <Leader>sj :NotoireOpenLinkSplit<cr>
-nnoremap <Leader>vj :NotoireOpenLinkVsplit<cr>
+nnoremap <Leader>sj :NotoireOpenLinkS<cr>
+nnoremap <Leader>vj :NotoireOpenLinkVS<cr>
 
 vnoremap <Leader>j :<C-U>NotoireCreateLink<cr>
-vnoremap <Leader>sj :<C-U>NotoireCreateLinkSplit<cr>
-vnoremap <Leader>vj :<C-U>NotoireCreateLinkVsplit<cr>
+vnoremap <Leader>sj :<C-U>NotoireCreateLinkS<cr>
+vnoremap <Leader>vj :<C-U>NotoireCreateLinkVS<cr>
+
+nnoremap <Leader>i :NotoireSearchNotes<cr>
+nnoremap <Leader>si :NotoireSearchNotesS<cr>
+nnoremap <Leader>vi :NotoireSearchNotesVS<cr>
+
+nnoremap <Leader>u :NotoireSearchLinksInNote<cr>
+nnoremap <Leader>su :NotoireSearchLinksInNoteS<cr>
+nnoremap <Leader>vu :NotoireSearchLinksInNoteVS<cr>
+
+nnoremap <Leader>o :NotoireSearchOrphanNotes<cr>
+nnoremap <Leader>so :NotoireSearchOrphanNotesS<cr>
+nnoremap <Leader>vo :NotoireSearchOrphanNotesVS<cr>
+ 
+nnoremap <Leader>y :NotoireSearchNotesLinkingHere<cr>
+nnoremap <Leader>sy :NotoireSearchNotesLinkingHereS<cr>
+nnoremap <Leader>vy :NotoireSearchNotesLinkingHereVS<cr>
 
 nnoremap <Leader>k :NotoirePrevNote<cr>
-nnoremap <Leader>sk :NotoirePrevNoteSplit<cr>
-nnoremap <Leader>vk :NotoirePrevNoteVsplit<cr>
+nnoremap <Leader>sk :NotoirePrevNoteS<cr>
+nnoremap <Leader>vk :NotoirePrevNoteVS<cr>
 
 nnoremap <Leader><Tab> :NotoireOpenIndex<cr>
-nnoremap <Leader>s<Tab> :NotoireOpenIndexSplit<cr>
-nnoremap <Leader>v<Tab> :NotoireOpenIndexVsplit<cr>
+nnoremap <Leader>s<Tab> :NotoireOpenIndexS<cr>
+nnoremap <Leader>v<Tab> :NotoireOpenIndexVS<cr>
+```
+
+Here is a diagram to help you see how it looks on a keyboard:
+
+TODO: diagram shortcuts
+
+If you wish for the plugin **not** to setup default mapping (to avoid conflict for exemple), you can use the `g:notoire_user_mapping`:
+
+```vim
+let g:notoire_user_mapping = 1
 ```
 
 See the [documentation](./doc/notoire.txt) for an exhaustive list of configuration options.
