@@ -1,5 +1,4 @@
 let g:ntr_link_rx = '\[.\{-}\](.\{-})'
-let g:ntr_note_id_rx = '(\(\x\)\+)$'
 
 command! -nargs=1 NotoireNextLink call notoire#next_link(<args>)
 command! -nargs=1 NotoirePrevLink call notoire#prev_link(<args>)

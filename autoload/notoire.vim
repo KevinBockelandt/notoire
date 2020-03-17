@@ -110,23 +110,21 @@ endfunction
 
 " Open the link under the cursor
 function! notoire#open_link(cmd)
-  " TODO should do error handling if the variable for the folder isn't correct
   let link = notoire#get_link_under_cursor()
   if link != -1
-    let note_id = matchstr(link, g:ntr_note_id_rx)
+    let note_id = matchstr(link, '(\x\+)$')
 
     "if we found the note to open, update the history and open the note
     if note_id != ""
       call notoire#open_file(a:cmd, g:notoire_folder . note_id[1:-2] . ".note")
-    elseif
-      "TODO display error message
+    else
+      echom "Error: cannot open note for link " . link
     endif
   endif
 endfunction
 
 " Open or create the index file (always note 0)
 function! notoire#open_index(cmd)
-  " TODO should do error handling if the variable for the folder isn't correct
   call notoire#open_file(a:cmd, g:notoire_folder . "/0.note")
 endfunction
 
@@ -325,7 +323,6 @@ endfunction
 
 " Create a new note and open it
 function! notoire#create_note(cmd)
-  " TODO should do error handling if the variable for the folder isn't correct
   let note_id = notoire#get_next_note_id()
   call notoire#open_file(a:cmd, g:notoire_folder . "/" . note_id . ".note")
 endfunction
