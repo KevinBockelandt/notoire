@@ -23,6 +23,10 @@ command! NotoireCreateLink call notoire#create_link("edit")
 command! NotoireCreateLinkS call notoire#create_link("split")
 command! NotoireCreateLinkVS call notoire#create_link("vsplit")
 
+command! NotoireCreateEmptyLink call notoire#create_empty_link("edit")
+command! NotoireCreateEmptyLinkS call notoire#create_empty_link("split")
+command! NotoireCreateEmptyLinkVS call notoire#create_empty_link("vsplit")
+
 command! NotoireSearchNotes call notoire#search_notes("edit")
 command! NotoireSearchNotesS call notoire#search_notes("split")
 command! NotoireSearchNotesVS call notoire#search_notes("vsplit")
@@ -48,9 +52,13 @@ if exists('g:notoire_user_mapping') == 0
   nnoremap <Leader>sj :NotoireOpenLinkS<cr>
   nnoremap <Leader>vj :NotoireOpenLinkVS<cr>
 
-  vnoremap <Leader>j :<C-U>NotoireCreateLink<cr>
-  vnoremap <Leader>sj :<C-U>NotoireCreateLinkS<cr>
-  vnoremap <Leader>vj :<C-U>NotoireCreateLinkVS<cr>
+  nnoremap <Leader>m :NotoireCreateEmptyLink<cr>
+  nnoremap <Leader>sm :NotoireCreateEmptyLinkS<cr>
+  nnoremap <Leader>vm :NotoireCreateEmptyLinkVS<cr>
+
+  vnoremap <Leader>m :<C-U>NotoireCreateLink<cr>
+  vnoremap <Leader>sm :<C-U>NotoireCreateLinkS<cr>
+  vnoremap <Leader>vm :<C-U>NotoireCreateLinkVS<cr>
 
   nnoremap <Leader>k :NotoirePrevNote<cr>
   nnoremap <Leader>sk :NotoirePrevNoteS<cr>

@@ -249,18 +249,25 @@ endfunction
 
 " Function called with the selection of FZF
 " param cmd is the command used to open the file
-" param is_for_link is a boolean to indicate if we create a link or not
+" param link_creation indicates what to do regarding link creation
+" 0 - no link creation
+" 1 - create link with visual selection
+" 2 - create link without visual selection
 " param e is the selection of FZF. The first word is the id of the note
-function! notoire#process_fzf_choice(cmd, is_for_link, e)
+function! notoire#process_fzf_choice(cmd, link_creation, e)
   let note_id = split(a:e)[0]
 
   if note_id == "NEW"
     let note_id = notoire#get_next_note_id()
   endif
 
-  " if we use the choice to create a link, edit the visually selected text
-  if a:is_for_link > 0
+  " if we choose to create a link with visual selection
+  if a:link_creation == 1
+    echom "about to execute in visual"
     exe "normal! \ei[\e`>la](" . note_id . ")\e"
+  " if we choose to create a link without visual selection
+  elseif a:link_creation == 2
+    exe "normal! \ei[](" . note_id . ")\eF]"
   endif
 
   call notoire#open_file(a:cmd, g:notoire_folder."/".note_id.g:notoire_file_extension)
@@ -284,10 +291,10 @@ function! notoire#get_fzf_opt()
 endfunction
 
 " Search for a note in all notes
-function! notoire#run_fzf(source, cmd, is_for_link)
+function! notoire#run_fzf(source, cmd, link_creation)
   call fzf#run({
     \ 'source': a:source,
-    \ 'sink': function('notoire#process_fzf_choice', [a:cmd, a:is_for_link]),
+    \ 'sink': function('notoire#process_fzf_choice', [a:cmd, a:link_creation]),
     \ 'dir': g:notoire_folder,
     \ 'options': notoire#get_fzf_opt()
   \ })
@@ -334,8 +341,13 @@ function! notoire#create_note(cmd)
   call notoire#open_file(a:cmd, notoire#get_full_path("/".note_id))
 endfunction
 
-" Create link to a note (selected through search or new) out of the
+" Create link to a note (selected through search or new) where the text is the
 " visual selection
 function! notoire#create_link(cmd)
   call notoire#run_fzf(notoire#notes_content(), a:cmd, 1)
+endfunction
+
+" Create link without text to a note (selected through search or new)
+function! notoire#create_empty_link(cmd)
+  call notoire#run_fzf(notoire#notes_content(), a:cmd, 2)
 endfunction

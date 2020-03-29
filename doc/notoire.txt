@@ -96,7 +96,9 @@ exemples on how to use it.
 *:NotoirePrevNote* ------------- | Go back to the previously opened note
 *:NotoireCreateNote* ----------- | Create a new note
 *:NotoireCreateLink* ----------- | Create a link to a new or existing note
-                               | using visual selection and open that note
+                               | using visual selection for the link text
+*:NotoireCreateEmptyLink* ------ | Create a link with empty text to a new or
+                               | existing note
 *:NotoireSearchNotes* ---------- | Interactively search for a note or create
                                | a new one
 *:NotoireSearchLinksInNote* ---- | Interactively search among all links
@@ -147,9 +149,13 @@ Notoire provides the following mapping by default:
     nnoremap <Leader>sj :NotoireOpenLinkS<cr>
     nnoremap <Leader>vj :NotoireOpenLinkVS<cr>
 
-    vnoremap <Leader>j :<C-U>NotoireCreateLink<cr>
-    vnoremap <Leader>sj :<C-U>NotoireCreateLinkS<cr>
-    vnoremap <Leader>vj :<C-U>NotoireCreateLinkVS<cr>
+    nnoremap <Leader>m :NotoireCreateEmptyLink<cr>
+    nnoremap <Leader>sm :NotoireCreateEmptyLinkS<cr>
+    nnoremap <Leader>vm :NotoireCreateEmptyLinkVS<cr>
+
+    vnoremap <Leader>m :<C-U>NotoireCreateLink<cr>
+    vnoremap <Leader>sm :<C-U>NotoireCreateLinkS<cr>
+    vnoremap <Leader>vm :<C-U>NotoireCreateLinkVS<cr>
 
     nnoremap <Leader>k :NotoirePrevNote<cr>
     nnoremap <Leader>sk :NotoirePrevNoteS<cr>
@@ -175,11 +181,6 @@ Notoire provides the following mapping by default:
     nnoremap <Leader>s<Tab> :NotoireOpenIndexS<cr>
     nnoremap <Leader>v<Tab> :NotoireOpenIndexVS<cr>
 <
-Note that the operations |:NotoireCreateLink| and |:NotoireOpenLink| use the
-same keys. The difference being one works in normal mode and the other in
-visual mode. Regardless of the mapping used, |:NotoireCreateLink| will only
-work when called in visual mode.
-
 If you wish to not use the default mapping, see the |g:notoire_user_mapping|
 option.
 

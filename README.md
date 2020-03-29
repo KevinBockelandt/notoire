@@ -15,14 +15,12 @@ You could roughly describe a Zettelkasten as being an external brain. It is a **
 
 ![visual example](https://github.com/KevinBockelandt/notoire/blob/master/doc/visual_example.png)
 
-In Notoire, the notes are stored in plain text files and interpreted as **Markdown**. There is no hierarchy as notes are connected only by links. You can navigate to and between them via a number of ways:
+In Notoire, the notes are stored in plain text files and interpreted as **Markdown**. They are identified by an **hexadecimal number** incremented from one note to the next. There is no hierarchy as notes are connected only by links. You can navigate to and between them via a number of ways:
 
 * by following a link to open the corresponding note
 * by going back to the previous note using an history system
 * by performing a search and selecting a note in the result list
 * by listing the links coming in or out of the current note and selecting one
-
-Each note is identified by an **hexadecimal number** that is incremented from one note to the other.
 
 > ❓ The name of the plugin comes from the French word `notoire` which can be translated in several ways including `notable` and `noteworthy`. Based on a number of French words ending in `'oire'`, one could also interpret the meaning of notoire as `a place where to put notes`.
 
@@ -55,7 +53,8 @@ FZF can be [easily installed](https://github.com/junegunn/fzf#installation) by v
 :NotoireOpenLink ------------- | Open link under cursor
 :NotoirePrevNote ------------- | Go back to the previously opened note
 :NotoireCreateNote ----------- | Create a new note
-:NotoireCreateLink ----------- | Create a link to a new or existing note using visual selection and open that note
+:NotoireCreateLink ----------- | Create a link to a new or existing note using visual selection as text link
+:NotoireCreateEmptyLink ------ | Create a link with empty text to a new or existing note
 :NotoireNextLink ------------- | Go to the next link in the note
 :NotoirePrevLink ------------- | Go to the previous link in the note 
 :NotoireSearchNotes ---------- | Interactively search for a note or create a new one
@@ -64,7 +63,6 @@ FZF can be [easily installed](https://github.com/junegunn/fzf#installation) by v
 :NotoireSearchNotesLinkingHere | Interactively search among notes that
 ```
 
-* `:NotoireCreateLink` will only work if you have a visual selection when you call it.
 * `:NotoireNextLink` and `:NotoirePrevLink` can be prefixed by a number to repeat the operation, like a regular vim navigation shortcut. Please be careful to use the proper [mapping](#setup).
 * Every command that opens a new buffer also have a version to open that buffer in a split. See the [documentation](./doc/notoire.txt) for more details.
 
@@ -87,9 +85,13 @@ nnoremap <Leader>j :NotoireOpenLink<cr>
 nnoremap <Leader>sj :NotoireOpenLinkS<cr>
 nnoremap <Leader>vj :NotoireOpenLinkVS<cr>
 
-vnoremap <Leader>j :<C-U>NotoireCreateLink<cr>
-vnoremap <Leader>sj :<C-U>NotoireCreateLinkS<cr>
-vnoremap <Leader>vj :<C-U>NotoireCreateLinkVS<cr>
+nnoremap <Leader>m :NotoireCreateEmptyLink<cr>
+nnoremap <Leader>sm :NotoireCreateEmptyLinkS<cr>
+nnoremap <Leader>vm :NotoireCreateEmptyLinkVS<cr>
+
+vnoremap <Leader>m :<C-U>NotoireCreateLink<cr>
+vnoremap <Leader>sm :<C-U>NotoireCreateLinkS<cr>
+vnoremap <Leader>vm :<C-U>NotoireCreateLinkVS<cr>
 
 nnoremap <Leader>k :NotoirePrevNote<cr>
 nnoremap <Leader>sk :NotoirePrevNoteS<cr>
