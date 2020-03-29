@@ -52,7 +52,8 @@ FZF can be [easily installed](https://github.com/junegunn/fzf#installation) by v
 :NotoireOpenIndex ------------ | Open the index note
 :NotoireOpenLink ------------- | Open link under cursor
 :NotoirePrevNote ------------- | Go back to the previously opened note
-:NotoireCreateNote ----------- | Create a new note
+:NotoireCreateNote ----------- | Create a new note from visual selection and place link
+:NotoireCreateEmptyNote ------ | Create a new empty note
 :NotoireCreateLink ----------- | Create a link to a new or existing note using visual selection as text link
 :NotoireCreateEmptyLink ------ | Create a link with empty text to a new or existing note
 :NotoireNextLink ------------- | Go to the next link in the note
@@ -92,6 +93,14 @@ nnoremap <Leader>vm :NotoireCreateEmptyLinkVS<cr>
 vnoremap <Leader>m :<C-U>NotoireCreateLink<cr>
 vnoremap <Leader>sm :<C-U>NotoireCreateLinkS<cr>
 vnoremap <Leader>vm :<C-U>NotoireCreateLinkVS<cr>
+
+nnoremap <Leader>n :NotoireCreateEmptyNote<cr>
+nnoremap <Leader>sn :NotoireCreateEmptyNoteS<cr>
+nnoremap <Leader>vn :NotoireCreateEmptyNoteVS<cr>
+
+vnoremap <Leader>n :<C-U>NotoireCreateNote<cr>
+vnoremap <Leader>sn :<C-U>NotoireCreateNoteS<cr>
+vnoremap <Leader>vn :<C-U>NotoireCreateNoteVS<cr>
 
 nnoremap <Leader>k :NotoirePrevNote<cr>
 nnoremap <Leader>sk :NotoirePrevNoteS<cr>

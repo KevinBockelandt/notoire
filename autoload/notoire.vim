@@ -335,8 +335,25 @@ endfunction
 
 " --- CREATE FUNCTIONS ------------------------------------------------------
 
-" Create a new note and open it
+" Create a new note from selection and open it
 function! notoire#create_note(cmd)
+  let note_id = notoire#get_next_note_id()
+
+  " delete the visual selection and write the empty link in place of
+  let save_a = @a
+  exe "normal! gv\"ad"
+  exe "normal! \ei[](" . note_id . ")\eF]"
+
+  " open the new note and paste content
+  call notoire#open_file(a:cmd, notoire#get_full_path("/".note_id))
+  exe "normal! \"ap"
+  write
+
+  let @a = save_a
+endfunction
+
+" Create a new empty note and open it
+function! notoire#create_empty_note(cmd)
   let note_id = notoire#get_next_note_id()
   call notoire#open_file(a:cmd, notoire#get_full_path("/".note_id))
 endfunction
