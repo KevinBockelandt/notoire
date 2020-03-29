@@ -76,3 +76,10 @@ if exists('g:notoire_user_mapping') == 0
   nnoremap <Leader>s<Tab> :NotoireOpenIndexS<cr>
   nnoremap <Leader>v<Tab> :NotoireOpenIndexVS<cr>
 endif
+
+
+if exists('g:notoire_file_extension') == 0
+  let g:notoire_file_extension = '.note'
+elseif g:notoire_file_extension[0] != '.'
+  let g:notoire_file_extension = '.' . g:notoire_file_extension
+endif

@@ -23,7 +23,7 @@ function! notoire#get_id_existing_notes()
 
   " check the filename is indeed a note and if yes keep only the id
   for i in range(0, len(filenames) - 1)
-    if fnamemodify(filenames[i], ":e") == "note"
+    if fnamemodify(filenames[i], ":e") == g:notoire_file_extension[1:-1]
       let root = fnamemodify(filenames[i], ":r")
       let match_hex = matchstr(root, '\x\+')
       if len(match_hex) == len(root)
@@ -40,6 +40,11 @@ function! notoire#check_health()
   " TODO find links that do not link anywhere
   " TODO check for empty notes
   echo "TODO - Should be performing the check"
+endfunction
+
+" Return the full path for a note based on the filename
+function! notoire#get_full_path(note_name)
+  return g:notoire_folder . a:note_name . g:notoire_file_extension
 endfunction
 
 
@@ -116,7 +121,7 @@ function! notoire#open_link(cmd)
 
     "if we found the note to open, update the history and open the note
     if note_id != ""
-      call notoire#open_file(a:cmd, g:notoire_folder . note_id[1:-2] . ".note")
+      call notoire#open_file(a:cmd, notoire#get_full_path(note_id[1:-2]))
     else
       echom "Error: cannot open note for link " . link
     endif
@@ -125,7 +130,7 @@ endfunction
 
 " Open or create the index file (always note 0)
 function! notoire#open_index(cmd)
-  call notoire#open_file(a:cmd, g:notoire_folder . "/0.note")
+  call notoire#open_file(a:cmd, notoire#get_full_path("/0"))
 endfunction
 
 
@@ -173,13 +178,14 @@ function! notoire#search_notes_linking_here(cmd)
   endif
 
   " use external command rg to find links to the current note
-  let results = system('rg -e "\[.+?\]\('.cur_file.'\)" '.g:notoire_folder.'/*.note')
+  let results = system('rg -e "\[.+?\]\('.cur_file.'\)" '.g:notoire_folder.'/*'.g:notoire_file_extension)
   let results = split(results, "\n")
 
   " format the rg results to use as input of fzf
   for i in range(0, len(results) - 1)
+    echom results[i]
     let res_parts = split(results[i], ":")
-    let res_parts = join(res_parts[1:-1], '')
+    let res_parts[1] = join(res_parts[1:-1], '')
     let res_filename = split(res_parts[0], "\/")[-1]
     let res_filename = fnamemodify(res_filename, ":r")
     let results[i] = res_filename . " " . res_parts[1]
@@ -195,7 +201,7 @@ function! notoire#search_orphan_notes(cmd)
   let fzf_source = []   " list of strings used as source for fzf
 
   " perform a regex search once to get all links in every note
-  let links = system('rg -oIN -e "\[.+?\]\([0-9a-f]+?\)" '.g:notoire_folder.'/*.note')
+  let links = system('rg -oIN -e "\[.+?\]\([0-9a-f]+?\)" '.g:notoire_folder.'/*'.g:notoire_file_extension)
   let links = split(links, "\n")
 
   " strip those links to keep only the note id
@@ -216,7 +222,7 @@ function! notoire#search_orphan_notes(cmd)
   " format the results to be used as source for fzf
   for i in range(0, len(orphan_ids) - 1)
     let id = orphan_ids[i]
-    let entry = id . " " . system('head -n 1 ' . g:notoire_folder.id.'.note')
+    let entry = id . " " . system('head -n 1 ' . g:notoire_folder.id.g:notoire_file_extension)
     call add(fzf_source, entry)
   endfor
 
@@ -233,7 +239,7 @@ function! notoire#notes_content()
   let content = []
 
   for i in range(0, len(note_ids) - 1)
-    let toAdd = note_ids[i]." ".system("cat ".g:notoire_folder.note_ids[i].".note")
+    let toAdd = note_ids[i]." ".system("cat ".g:notoire_folder.note_ids[i].g:notoire_file_extension)
     call add(content, toAdd)
   endfor
   
@@ -257,13 +263,14 @@ function! notoire#process_fzf_choice(cmd, is_for_link, e)
     exe "normal! \ei[\e`>la](" . note_id . ")\e"
   endif
 
-  call notoire#open_file(a:cmd, g:notoire_folder."/".note_id.".note")
+  call notoire#open_file(a:cmd, g:notoire_folder."/".note_id.g:notoire_file_extension)
 endfunction
 
 " Return a string with the options to use when running fzf
 function! notoire#get_fzf_opt()
   let o_pw = " --preview-window=down:60%:wrap"
-  let o_p = ' --preview="fmt {1}.note"'
+  let o_p_base = "fmt {1}" . g:notoire_file_extension
+  let o_p = ' --preview="' . o_p_base . '"'
   let o_base = ' -e +m --cycle'
   let o_dsp = ' --no-bold --info="inline"'
   let o_col = " --color=border:#FF8888,hl:#FFF714,hl+:#FFF714"
@@ -324,7 +331,7 @@ endfunction
 " Create a new note and open it
 function! notoire#create_note(cmd)
   let note_id = notoire#get_next_note_id()
-  call notoire#open_file(a:cmd, g:notoire_folder . "/" . note_id . ".note")
+  call notoire#open_file(a:cmd, notoire#get_full_path("/".note_id))
 endfunction
 
 " Create link to a note (selected through search or new) out of the

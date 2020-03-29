@@ -60,6 +60,10 @@ The notes are stored in plain text files that are treated as markdown. That
 being said, beyond the way links are formatted you are free to write the
 content of the notes any way you want.
 
+By default the note files have the `.note` file extension to distinguish them
+from regular markdown files. You can change that by setting the
+|g:notoire_file_extension| option.
+
 Each note is a separate file and each file has a name that is an hexadecimal
 number. It is highly discouraged to create files by hand. It is better to let
 the plugin do it as it will automatically scan the content of the note
@@ -68,7 +72,7 @@ folder to determine the next id to use.
 -----------------------------------------------------------------------------
 Index note                                                    *notoire-index*
 
-The note in file `0.note` is considered as the 'index note' by Notoire. There
+The note in file with id `0` is considered as the 'index note' by Notoire. There
 is a dedicated command to access it: |:NotoireOpenIndex|.
 
 Technically speaking it's just a note like any other, so you can choose to use
@@ -106,26 +110,31 @@ exemples on how to use it.
 =============================================================================
 Options                                                     *notoire-options*
 
-The mandatory option `g:notoire_folder` defines the path to the folder
+The mandatory option *g:notoire_folder* defines the path to the folder
 containing the notes. Exemple:
 >
     let g:notoire_folder = '~/Dropbox/notoire/'
+
+The optional option *g:notoire_file_extension* allows you to specify a the
+file extension to use for note files. If you do not specify it, the default
+`note` extension is used. Exemple:
+>
+    let g:notoire_file_extension = 'md'
 <
-The optional option `g:notoire_color` allows you to specify a custom color
+The optional option *g:notoire_color* allows you to specify a custom color
 scheme for fzf. It follows the syntax used by fzf, available in it's
 documentation. Exemple:
 >
     let g:notoire_color = "--color=border:#FF8888,hl:#FFF714,hl+:#FFF714"
 <
-The optional option `g:notoire_user_mapping` tells the plugin to not use the
-default mapping. It is then up to you to define the mapping. See
-|notoire-mapping| for an exemple.
+The optional option *g:notoire_user_mapping* tells the plugin not to use the
+default mapping. See |notoire-mapping| for a base for an alternative mapping.
 
 0 - keep the default mapping
 1 - do not use default mapping
 >
     let g:notoire_user_mapping = 1
-
+<
 =============================================================================
 Mapping                                                     *notoire-mapping*
 
@@ -171,8 +180,8 @@ same keys. The difference being one works in normal mode and the other in
 visual mode. Regardless of the mapping used, |:NotoireCreateLink| will only
 work when called in visual mode.
 
-If you wish to not use the default mapping, see the `g:notoire_user_mapping`
-option. |notoire-options|
+If you wish to not use the default mapping, see the |g:notoire_user_mapping|
+option.
 
 
 =============================================================================
