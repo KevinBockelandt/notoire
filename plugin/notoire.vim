@@ -103,3 +103,9 @@ if exists('g:notoire_file_extension') == 0
 elseif g:notoire_file_extension[0] != '.'
   let g:notoire_file_extension = '.' . g:notoire_file_extension
 endif
+
+if exists('g:notoire_folder') == 0
+  echom "You need to define the g:notoire_folder"
+elseif g:notoire_folder[-1] != '.'
+  let g:notoire_folder = g:notoire_folder . '/'
+endif
