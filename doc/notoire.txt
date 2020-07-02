@@ -26,7 +26,7 @@ CONTENTS                                                   *notoire-contents*
 =============================================================================
 Introduction                                           *notoire-introduction*
 
-You could roughly sum up a Zettlekasten as being an external brain. It is a
+You could roughly sum up a Zettelkasten as being an external brain. It is a
 network of notes where each note contains an idea. You can search it, expand
 it, make new connections, etc.
 
@@ -80,6 +80,17 @@ it any way you want (including not at all). That being said it is recommended
 to use it as an entry point in you note system and / or as a temporary inbox
 where to write reminders regarding notes you cannot create right away.
 
+-----------------------------------------------------------------------------
+Multiple folders                                              *notoire-index*
+
+You can handle several separated Zettelkasten at the same time by specifying
+a different folder for each one. You then switch from one to another with
+the |:NotoireSelectFolder| command. All the commands apply only to the folder
+currently selected.
+
+You can specify the list of folders to use with the option
+*g:notoire_folders*
+
 
 =============================================================================
 Commands                                                   *notoire-commands*
@@ -114,10 +125,10 @@ exemples on how to use it.
 =============================================================================
 Options                                                     *notoire-options*
 
-The mandatory option *g:notoire_folder* defines the path to the folder
+The mandatory option *g:notoire_folders* defines the paths to the folders
 containing the notes. Exemple:
 >
-    let g:notoire_folder = '~/Dropbox/notoire/'
+    let g:notoire_folders = ['~/Dropbox/myZettelkasten/']
 
 The optional option *g:notoire_file_extension* allows you to specify a the
 file extension to use for note files. If you do not specify it, the default

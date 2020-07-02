@@ -3,6 +3,8 @@ let g:ntr_link_rx = '\[.\{-}\](.\{-})'
 command! -nargs=1 NotoireNextLink call notoire#next_link(<args>)
 command! -nargs=1 NotoirePrevLink call notoire#prev_link(<args>)
 
+command! NotoireSelectFolder call notoire#select_folder()
+
 command! NotoireOpenLink call notoire#open_link("edit")
 command! NotoireOpenLinkS call notoire#open_link("split")
 command! NotoireOpenLinkVS call notoire#open_link("vsplit")
@@ -49,6 +51,8 @@ command! NotoireSearchNotesLinkingHereVS call notoire#search_notes_linking_here(
 
 
 if exists('g:notoire_user_mapping') == 0
+  nnoremap <Leader>f :NotoireSelectFolder<cr>
+
   nnoremap <Leader>l :<C-U>NotoireNextLink(v:count1)<cr>
   nnoremap <Leader>h :<C-U>NotoirePrevLink(v:count1)<cr>
 
@@ -104,8 +108,11 @@ elseif g:notoire_file_extension[0] != '.'
   let g:notoire_file_extension = '.' . g:notoire_file_extension
 endif
 
-if exists('g:notoire_folder') == 0
-  echom "You need to define the g:notoire_folder"
-elseif g:notoire_folder[-1] != '.'
-  let g:notoire_folder = g:notoire_folder . '/'
+if exists('g:notoire_folders') == 0
+  echom "You need to define the g:notoire_folders"
+else 
+  let g:current_notoire_folder = g:notoire_folders[0]
+  if g:current_notoire_folder[-1] != '/'
+    let g:current_notoire_folder = g:current_notoire_folder . '/'
+  endif
 endif

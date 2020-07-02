@@ -1,6 +1,6 @@
 # Notoire
 
-> ⚠️ The plugin is currently not compatible with Windows systems. We're working on it :)
+> ⚠️ The plugin is not compatible with Windows systems. It has been successfuly tested on GNU/Linux and MacOS.
 
 [Introduction](#introduction) | [Installation](#installation) | [Commands](#commands) | [Setup](#setup) | [Contributing](#contributing)
 
@@ -23,6 +23,8 @@ In Notoire, the notes are stored in plain text files and interpreted as **Markdo
 * by listing the links coming in or out of the current note and selecting one
 
 > ❓ The name of the plugin comes from the French word `notoire` which can be translated in several ways including `notable` and `noteworthy`. Based on a number of French words ending in `'oire'`, one could also interpret the meaning of notoire as `a place where to put notes`.
+
+You can also have several Zettelkasten (called folders in this plugin) set up if you want to take notes on wildly different topics. You then switch from one to another with the `:NotoireSelectFolder` command.
 
 
 ## Installation
@@ -49,6 +51,7 @@ FZF can be [easily installed](https://github.com/junegunn/fzf#installation) by v
 ## Commands
 
 ```
+:NotoireSelectFolder --------- | Select the folder to use
 :NotoireOpenIndex ------------ | Open the index note
 :NotoireOpenLink ------------- | Open link under cursor
 :NotoirePrevNote ------------- | Go back to the previously opened note
@@ -70,10 +73,10 @@ FZF can be [easily installed](https://github.com/junegunn/fzf#installation) by v
 
 ## Setup
 
-You **need** to define the option `g:notoire_folder` which represents the path of the folder where the notes should be kept. It's usually a good idea to use a folder that will be backed up automatically somehow. Ex:
+You **need** to define the option `g:notoire_folders` which indicates the list of paths to the folders where the notes should be kept. It's usually a good idea to use folders that will be backed up automatically somehow. Ex:
 
 ```vim
-let g:notoire_folder = '~/Dropbox/notes/notoire/'
+let g:notoire_folders = ['~/Dropbox/notes/myZettelkasten', '~/Dropbox/notes/anotherOne']
 ```
 
 Notoire provides the following mapping by default:
@@ -81,6 +84,8 @@ Notoire provides the following mapping by default:
 ```vim
 nnoremap <Leader>l :<C-U>NotoireNextLink(v:count1)<cr>
 nnoremap <Leader>h :<C-U>NotoirePrevLink(v:count1)<cr>
+
+nnoremap <Leader>f :NotoireSelectFolder<cr>
  
 nnoremap <Leader>j :NotoireOpenLink<cr>
 nnoremap <Leader>sj :NotoireOpenLinkS<cr>

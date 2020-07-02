@@ -18,7 +18,7 @@ endfunction
 function! notoire#get_id_existing_notes()
   let note_ids = []
 
-  let filenames = system("ls -1 " . g:notoire_folder)
+  let filenames = system("ls -1 " . g:current_notoire_folder)
   let filenames = split(filenames, "\n")
 
   " check the filename is indeed a note and if yes keep only the id
@@ -44,7 +44,7 @@ endfunction
 
 " Return the full path for a note based on the filename
 function! notoire#get_full_path(note_name)
-  return g:notoire_folder . a:note_name . g:notoire_file_extension
+  return g:current_notoire_folder . a:note_name . g:notoire_file_extension
 endfunction
 
 
@@ -178,7 +178,7 @@ function! notoire#search_notes_linking_here(cmd)
   endif
 
   " use external command rg to find links to the current note
-  let results = system('rg -e "\[.+?\]\('.cur_file.'\)" '.g:notoire_folder.'/*'.g:notoire_file_extension)
+  let results = system('rg -e "\[.+?\]\('.cur_file.'\)" '.g:current_notoire_folder.'/*'.g:notoire_file_extension)
   let results = split(results, "\n")
 
   " format the rg results to use as input of fzf
@@ -201,7 +201,7 @@ function! notoire#search_orphan_notes(cmd)
   let fzf_source = []   " list of strings used as source for fzf
 
   " perform a regex search once to get all links in every note
-  let links = system('rg -oIN -e "\[.+?\]\([0-9a-f]+?\)" '.g:notoire_folder.'/*'.g:notoire_file_extension)
+  let links = system('rg -oIN -e "\[.+?\]\([0-9a-f]+?\)" '.g:current_notoire_folder.'/*'.g:notoire_file_extension)
   let links = split(links, "\n")
 
   " strip those links to keep only the note id
@@ -222,7 +222,7 @@ function! notoire#search_orphan_notes(cmd)
   " format the results to be used as source for fzf
   for i in range(0, len(orphan_ids) - 1)
     let id = orphan_ids[i]
-    let entry = id . " " . system('head -n 1 ' . g:notoire_folder.id.g:notoire_file_extension)
+    let entry = id . " " . system('head -n 1 ' . g:current_notoire_folder.id.g:notoire_file_extension)
     call add(fzf_source, entry)
   endfor
 
@@ -239,7 +239,7 @@ function! notoire#notes_content()
   let content = []
 
   for i in range(0, len(note_ids) - 1)
-    let toAdd = note_ids[i]." ".system("cat ".g:notoire_folder.note_ids[i].g:notoire_file_extension)
+    let toAdd = note_ids[i]." ".system("cat ".g:current_notoire_folder.note_ids[i].g:notoire_file_extension)
     call add(content, toAdd)
   endfor
   
@@ -270,7 +270,7 @@ function! notoire#process_fzf_choice(cmd, link_creation, e)
     exe "normal! \ei[](" . note_id . ")\eF]"
   endif
 
-  call notoire#open_file(a:cmd, g:notoire_folder."/".note_id.g:notoire_file_extension)
+  call notoire#open_file(a:cmd, g:current_notoire_folder."/".note_id.g:notoire_file_extension)
 endfunction
 
 " Return a string with the options to use when running fzf
@@ -295,7 +295,7 @@ function! notoire#run_fzf(source, cmd, link_creation)
   call fzf#run({
     \ 'source': a:source,
     \ 'sink': function('notoire#process_fzf_choice', [a:cmd, a:link_creation]),
-    \ 'dir': g:notoire_folder,
+    \ 'dir': g:current_notoire_folder,
     \ 'options': notoire#get_fzf_opt()
   \ })
 endfunction
@@ -367,4 +367,23 @@ endfunction
 " Create link without text to a note (selected through search or new)
 function! notoire#create_empty_link(cmd)
   call notoire#run_fzf(notoire#notes_content(), a:cmd, 2)
+endfunction
+
+
+" --- FOLDER FUNCTIONS ------------------------------------------------------
+
+function! notoire#open_folder(path)
+  let g:current_notoire_folder = a:path
+  if g:current_notoire_folder[-1] != '/'
+    let g:current_notoire_folder = g:current_notoire_folder . '/'
+  endif
+  call notoire#open_index("edit")
+endfunction
+
+function! notoire#select_folder()
+  call fzf#run({
+    \ 'source': g:notoire_folders,
+    \ 'sink': function('notoire#open_folder'),
+    \ 'options': ' -e +m --cycle --color=border:#FF8888,hl:#FFF714,hl+:#FFF714'
+  \ })
 endfunction
