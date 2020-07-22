@@ -117,11 +117,16 @@ endfunction
 function! notoire#open_link(cmd)
   let link = notoire#get_link_under_cursor()
   if link != -1
-    let note_id = matchstr(link, '(\x\+)$')
+    " keep only id part of link with parenthesis
+    let note_id = matchstr(link, '(\x\+.*\x*)$')
+    " remove parenthesis
+    let note_id = note_id[1:-2]
+    " remove any potential file extension
+    let note_id = matchstr(note_id, '^\x\+')
 
     "if we found the note to open, update the history and open the note
     if note_id != ""
-      call notoire#open_file(a:cmd, notoire#get_full_path(note_id[1:-2]))
+      call notoire#open_file(a:cmd, notoire#get_full_path(note_id))
     else
       echom "Error: cannot open note for link " . link
     endif
@@ -160,7 +165,7 @@ function! notoire#search_links_in_note(cmd)
     " [0] the string matching the pattern
     " [1] index of first char of the match
     " [2] index of last char of the match
-    let id_info = matchstrpos(link, '(\x\{-})$')
+    let id_info = matchstrpos(link, '(\x\{-}.*\x*)$')
 
     let id_part = id_info[0][1:-2] . " "
     let text_part = link[0:id_info[1] - 1]
@@ -175,6 +180,11 @@ function! notoire#search_notes_linking_here(cmd)
   let cur_file = expand('%:t:r')
   if cur_file == ""
     return
+  endif
+
+  " add the file extension if the corresponding option is set
+  if g:notoire_display_file_extension == 1
+    let cur_file = cur_file . g:notoire_file_extension
   endif
 
   " use external command rg to find links to the current note
@@ -208,6 +218,12 @@ function! notoire#search_orphan_notes(cmd)
   for i in range(0, len(links) - 1)
     let note_id = matchstr(links[i], '(\x\{-})$')
     let note_id = note_id[1:-2]
+
+    " add the file extension if the corresponding option is set
+    if g:notoire_display_file_extension == 1
+      let note_id = note_id . g:notoire_file_extension
+    endif
+
     call add(linked_ids, note_id)
   endfor
 
@@ -261,13 +277,20 @@ function! notoire#process_fzf_choice(cmd, link_creation, e)
     let note_id = notoire#get_next_note_id()
   endif
 
+  " there is an option to add file extension to note id in the links
+  " which means we need to handle specificaly the note id that is displayed
+  let displayed_note_id = note_id
+  if g:notoire_display_file_extension == 1
+    let displayed_note_id = note_id . g:notoire_file_extension
+  endif
+
   " if we choose to create a link with visual selection
   if a:link_creation == 1
     echom "about to execute in visual"
-    exe "normal! \ei[\e`>la](" . note_id . ")\e"
+    exe "normal! \ei[\e`>la](" . displayed_note_id . ")\e"
   " if we choose to create a link without visual selection
   elseif a:link_creation == 2
-    exe "normal! \ei[](" . note_id . ")\eF]"
+    exe "normal! \ei[](" . displayed_note_id . ")\eF]"
   endif
 
   call notoire#open_file(a:cmd, g:current_notoire_folder."/".note_id.g:notoire_file_extension)

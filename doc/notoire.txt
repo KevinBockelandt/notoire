@@ -17,6 +17,7 @@ CONTENTS                                                   *notoire-contents*
   Concepts ................. | notoire-concepts |
     Note file format ....... | notoire-note-files |
     Index note ............. | notoire-index |
+    Notoire folders ........ | notoire-folders |
   Commands ................. | notoire-commands |
   Options .................. | notoire-options |
   Mapping .................. | notoire-mapping |
@@ -81,7 +82,7 @@ to use it as an entry point in you note system and / or as a temporary inbox
 where to write reminders regarding notes you cannot create right away.
 
 -----------------------------------------------------------------------------
-Multiple folders                                              *notoire-index*
+Multiple folders                                            *notoire-folders*
 
 You can handle several separated Zettelkasten at the same time by specifying
 a different folder for each one. You then switch from one to another with
@@ -136,6 +137,15 @@ file extension to use for note files. If you do not specify it, the default
 >
     let g:notoire_file_extension = 'md'
 <
+The optional option *g:notoire_display_file_extension* can be set if you want
+file extension to be added at the end of links. Without it, the links will
+only display the ID of the file. It is disabled by default.
+
+0 - do not add file extension to links
+1 - add file extension to links
+>
+    let g:notoire_display_file_extension = 1
+
 The optional option *g:notoire_color* allows you to specify a custom color
 scheme for fzf. It follows the syntax used by fzf, available in it's
 documentation. Exemple:
