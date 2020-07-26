@@ -167,7 +167,11 @@ function! notoire#search_links_in_note(cmd)
     " [2] index of last char of the match
     let id_info = matchstrpos(link, '(\x\{-}.*\x*)$')
 
-    let id_part = id_info[0][1:-2] . " "
+    let remove_from_end = 2
+    if g:notoire_display_file_extension == 1
+      let remove_from_end = remove_from_end + strlen(g:notoire_file_extension)
+    endif
+    let id_part = id_info[0][1:-remove_from_end] . " "
     let text_part = link[0:id_info[1] - 1]
     let links[i] = id_part . text_part
   endfor
@@ -211,18 +215,22 @@ function! notoire#search_orphan_notes(cmd)
   let fzf_source = []   " list of strings used as source for fzf
 
   " perform a regex search once to get all links in every note
-  let links = system('rg -oIN -e "\[.+?\]\([0-9a-f]+?\)" '.g:current_notoire_folder.'/*'.g:notoire_file_extension)
+  let extension_for_search = ""
+  if g:notoire_display_file_extension == 1
+    let extension_for_search = g:notoire_file_extension
+  endif
+  let links = system('rg -oIN -e "\[.+?\]\([1-9a-f]+'.extension_for_search.'?\)" '.g:current_notoire_folder.'/*'.g:notoire_file_extension)
   let links = split(links, "\n")
 
   " strip those links to keep only the note id
   for i in range(0, len(links) - 1)
-    let note_id = matchstr(links[i], '(\x\{-})$')
-    let note_id = note_id[1:-2]
+    let id_info = matchstrpos(links[i], '(\x\{-}.*\x*)$')
 
-    " add the file extension if the corresponding option is set
+    let remove_from_end = 2
     if g:notoire_display_file_extension == 1
-      let note_id = note_id . g:notoire_file_extension
+      let remove_from_end = remove_from_end + strlen(g:notoire_file_extension)
     endif
+    let note_id = id_info[0][1:-remove_from_end]
 
     call add(linked_ids, note_id)
   endfor
