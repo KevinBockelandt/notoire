@@ -295,7 +295,7 @@ function! notoire#process_fzf_choice(cmd, link_creation, e)
   " if we choose to create a link with visual selection
   if a:link_creation == 1
     echom "about to execute in visual"
-    exe "normal! \ei[\e`>la](" . displayed_note_id . ")\e"
+    exe "normal! \ei[\e`>\el\ea](" . displayed_note_id . ")\e"
   " if we choose to create a link without visual selection
   elseif a:link_creation == 2
     exe "normal! \ei[](" . displayed_note_id . ")\eF]"
